@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>LIMMAR USINAGEM — Progresso do Projeto</title>
+  <style>
+    :root{
+      --pct-final: 70;     /* << Altere aqui o percentual desejado (0 a 100) */
+      --pct: 0;            /* usado pela animação */
+      --cor-ok: #2ecc71;
+      --cor-bg: #e6e6e6;
+      --espessura: 44px;   /* "altura" da pizza 3D (espessura) */
+      --diametro: 260px;   /* tamanho do gráfico */
+      --duracao: 1600ms;   /* duração da animação de entrada */
+      --raio: calc(var(--diametro) / 2);
+    }
+
+    @keyframes fillProgress {
+      from { --pct: 0;   }
+      to   { --pct: var(--pct-final); }
+    }
+
+    body{
+      margin:0;
+      font-family: system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, Cantarell, "Helvetica Neue", Arial, "Noto Sans", "Apple Color Emoji", "Segoe UI Emoji";
+      background: #0f1115;
+      color: #f4f4f4;
+      display: grid;
+      place-items: center;
+      min-height: 100vh;
+      gap: 28px;
+    }
+
+    .wrap{
+      display: grid;
+      place-items: center;
+      gap: 18px;
+    }
+
+    h1{
+      margin: 0;
+      letter-spacing: 0.6px;
+      font-size: clamp(20px, 2.6vw, 28px);
+      text-align: center;
+    }
+
+    .sub{
+      margin: 0;
+      opacity: 0.8;
+      font-size: 14px;
+      text-align: center;
+    }
+
+    /* --- Gráfico circular (donut) com "look" 3D --- */
+    .donut3d{
+      position: relative;
+      width: var(--diametro);
+      height: var(--diametro);
+      transform-style: preserve-3d;
+      /* leve inclinação para dar sensação 3D */
+      transform: rotateX(18deg) rotateZ(-90deg);
+      filter: drop-shadow(0 22px 24px rgba(0,0,0,.44));
+      animation: fillProgress var(--duracao) ease-out forwards;
+    }
+
+    /* topo da pizza: conic-gradient animado por --pct */
+    .donut3d .topo{
+      position: absolute;
+      inset: 0;
+      border-radius: 50%;
+      background:
+        conic-gradient(var(--cor-ok) calc(var(--pct) * 1%), var(--cor-bg) 0);
+      display: grid;
+      place-items: center;
+      /* "furo" central */
+      -webkit-mask:
+        radial-gradient(circle at center, transparent calc(var(--raio) - 52px), #000 calc(var(--raio) - 52px));
+              mask:
+        radial-gradient(circle at center, transparent calc(var(--raio) - 52px), #000 calc(var(--raio) - 52px));
+    }
+
+    /* aro superior (para ter um chanfrado sutil) */
+    .donut3d .borda{
+      position: absolute;
+      inset: 0;
+      border-radius: 50%;
+      background:
+        radial-gradient(circle at 50% 40%,
+          rgba(255,255,255,.28), rgba(255,255,255,0) 55%);
+      mix-blend-mode: overlay;
+      pointer-events: none;
+    }
+
+    /* lateral (espessura) da pizza */
+    .donut3d::before{
+      content:"";
+      position: absolute;
+      inset: 0;
+      border-radius: 50%;
+      transform: translateZ(calc(-1 * var(--espessura)));
+      background:
+        radial-gradient(circle at 50% 50%, rgba(0,0,0,.28), rgba(0,0,0,0) 64%),
+        conic-gradient(
+          color-mix(in oklab, var(--cor-ok) 82%, black) calc(var(--pct) * 1%),
+          color-mix(in oklab, var(--cor-bg) 82%, black) 0
+        );
+      -webkit-mask:
+        radial-gradient(circle at center, transparent calc(var(--raio) - 52px), #000 calc(var(--raio) - 52px));
+              mask:
+        radial-gradient(circle at center, transparent calc(var(--raio) - 52px), #000 calc(var(--raio) - 52px));
+      filter: saturate(0.9);
+    }
+
+    /* rótulo central (valor) — renderizado em um plano próprio para não inclinar o texto */
+    .label{
+      position: absolute;
+      inset: 0;
+      display: grid;
+      place-items: center;
+      transform: rotateZ(90deg) rotateX(-18deg); /* desfaz a inclinação visual */
+      pointer-events: none;
+    }
+
+    .label .valor{
+      font-weight: 700;
+      font-size: 42px;
+      line-height: 1;
+    }
+    .label .valor small{
+      font-size: 20px;
+      opacity: .7;
+      font-weight: 600;
+    }
+    .label .txt{
+      margin-top: 6px;
+      font-size: 13px;
+      opacity: .85;
+      letter-spacing: .4px;
+      text-transform: uppercase;
+    }
+
+    /* botão de exemplo para trocar o percentual */
+    .controls{
+      display: flex;
+      gap: 12px;
+      align-items: center;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+    input[type="range"]{
+      width: 260px;
+      accent-color: #2ecc71;
+    }
+    .pill{
+      border: 1px solid rgba(255,255,255,.14);
+      padding: 8px 12px;
+      border-radius: 999px;
+      background: rgba(255,255,255,.06);
+      cursor: pointer;
+      user-select: none;
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <h1># LIMMAR USINAGEM</h1>
+    <p class="sub">Progresso de produção • Exemplo de pizza 3D animada</p>
+
+    <div class="donut3d" id="grafico">
+      <div class="topo"></div>
+      <div class="borda"></div>
+      <div class="label">
+        <div>
+          <div class="valor" id="valor">0<small>%</small></div>
+          <div class="txt">Concluído</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="controls">
+      <input type="range" id="slider" min="0" max="100" value="70" />
+      <span class="pill" id="btn70">70%</span>
+      <span class="pill" id="btn90">90%</span>
+      <span class="pill" id="btnReset">Reset</span>
+    </div>
+  </div>
+
+  <script>
+    // Configuração inicial
+    const root = document.documentElement;
+    const valorEl = document.getElementById('valor');
+    const slider = document.getElementById('slider');
+    const btn70 = document.getElementById('btn70');
+    const btn90 = document.getElementById('btn90');
+    const btnReset = document.getElementById('btnReset');
+
+    // Atualiza o texto do centro durante a animação
+    let animFrame;
+    function animateCounter(from, to, dur = 900){
+      cancelAnimationFrame(animFrame);
+      const t0 = performance.now();
+      function tick(now){
+        const p = Math.min(1, (now - t0) / dur);
+        const cur = Math.round(from + (to - from) * p);
+        valorEl.innerHTML = cur + "<small>%</small>";
+        if(p < 1) animFrame = requestAnimationFrame(tick);
+      }
+      animFrame = requestAnimationFrame(tick);
+    }
+
+    // Rodar a animação de entrada com base em --pct-final
+    window.addEventListener('load', () => {
+      const alvo = parseFloat(getComputedStyle(root).getPropertyValue('--pct-final')) || 0;
+      animateCounter(0, alvo);
+      // Após a animação CSS, certifique-se do valor final no centro
+      setTimeout(() => valorEl.innerHTML = Math.round(alvo) + "<small>%</small>", 1800);
+      slider.value = alvo;
+    });
+
+    // Interação: alterar a porcentagem ao mexer no slider
+    function setPercent(p){
+      p = Math.max(0, Math.min(100, Number(p) || 0));
+      root.style.setProperty('--pct-final', p);
+      // Reinicia a animação do preenchimento
+      root.style.setProperty('--pct', 0);
+      document.getElementById('grafico').style.animation = 'none';
+      // força reflow
+      void document.getElementById('grafico').offsetWidth;
+      document.getElementById('grafico').style.animation = '';
+      animateCounter(parseInt(valorEl.textContent) || 0, p);
+    }
+    slider.addEventListener('input', e => setPercent(e.target.value));
+    btn70.addEventListener('click', () => setPercent(70));
+    btn90.addEventListener('click', () => setPercent(90));
+    btnReset.addEventListener('click', () => setPercent(0));
+  </script>
+</body>
+</html>
