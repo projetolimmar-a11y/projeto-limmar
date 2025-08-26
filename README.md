@@ -27,7 +27,7 @@ Aqui você pode escrever uma breve apresentação sobre você, seus interesses e
 ## Projeto 1 - Fatec
 Breve descrição do projeto desenvolvido na Fatec.
 
-[Veja o gráfico de produção (70% pronto)](https://projetolimmar-a11y.github.io/projeto-limmar/)
+[Veja o gráfico de produção](https://projetolimmar-a11y.github.io/projeto-limmar/)
 
 <h2 align='center'>Integrantes do projeto</h2> 
 <table align='center'>
