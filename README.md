@@ -1,70 +1,60 @@
-# Getting Started with Create React App
+# LIMMAR USINAGEM
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+# Sumário
 
-## Available Scripts
+- [Introdução](#introducao)
+- [Meus Principais Conhecimentos](#meus-principais-conhecimentos)
+- [Projeto 1 - Fatec](#projeto-1---fatec)
+- [Parceiro Acadêmico](#parceiro-academico)
+- [Objetivo do Projeto](#objetivo-do-projeto)
+- [Tecnologias Utilizadas](#tecnologias-utilizadas)
+- [Ferramentas Utilizadas](#ferramentas-utilizadas)
+- [Contribuicoes Pessoais](#contribuicoes-pessoais)
+- [Funcoes que Reconhecem Voz e Transformam em Texto](#funcoes-que-reconhecem-voz-e-transformam-em-texto)
+- [Requisicao e Interpretacao de Dados Vindos da Web](#requisicao-e-interpretacao-de-dados-vindos-da-web)
+- [Tratamento de Erros](#tratamento-de-erros)
+- [Aprendizados Efetivos](#aprendizados-efetivos)
 
-In the project directory, you can run:
+---
 
-### `npm start`
+## Introducao
+Aqui você pode escrever uma breve apresentação sobre você, seus interesses e objetivo do portfólio.
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+## Meus Principais Conhecimentos
+- Linguagens de Programação: Python, JavaScript, PHP...
+- Frameworks: React, Node.js, Laravel...
+- Outras Habilidades: Git, SQL, APIs, Testes Automatizados...
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+## Projeto 1 - Fatec
+Breve descrição do projeto desenvolvido na Fatec.
 
-### `npm test`
+## Parceiro Academico
+Nome do parceiro acadêmico ou instituição.
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+## Objetivo do Projeto
+Explicação clara do que o projeto pretende alcançar.
 
-### `npm run build`
+## Tecnologias Utilizadas
+- Tecnologia 1
+- Tecnologia 2
+- Tecnologia 3
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+## Ferramentas Utilizadas
+- Ferramenta 1
+- Ferramenta 2
+- Ferramenta 3
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+## Contribuicoes Pessoais
+Liste suas contribuições individuais para o projeto.
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+## Funcoes que Reconhecem Voz e Transformam em Texto
+Descreva brevemente como essas funções foram implementadas ou utilizadas.
 
-### `npm run eject`
+## Requisicao e Interpretacao de Dados Vindos da Web
+Detalhe como o projeto lida com requisições e análise de dados da web.
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+## Tratamento de Erros
+Explique as estratégias implementadas para tratar erros no projeto.
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
-
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+## Aprendizados Efetivos
+Liste os conhecimentos e habilidades que você adquiriu ao longo do projeto.
