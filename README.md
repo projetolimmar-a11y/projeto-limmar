@@ -5,13 +5,12 @@
 - [Introdução](#introducao)
 - [Meus Principais Conhecimentos](#meus-principais-conhecimentos)
 - [Projeto 1 - Fatec](#projeto-1---fatec)
-- [Parceiro Acadêmico](#parceiro-academico)
 - [Objetivo do Projeto](#objetivo-do-projeto)
 - [Tecnologias Utilizadas](#tecnologias-utilizadas)
 - [Ferramentas Utilizadas](#ferramentas-utilizadas)
-- [Contribuicoes Pessoais](#contribuicoes-pessoais)
-- [Funcoes que Reconhecem Voz e Transformam em Texto](#funcoes-que-reconhecem-voz-e-transformam-em-texto)
-- [Requisicao e Interpretacao de Dados Vindos da Web](#requisicao-e-interpretacao-de-dados-vindos-da-web)
+- [Contribuições Pessoais](#contribuicoes-pessoais)
+- [Funções que Reconhecem Voz e Transformam em Texto](#funcoes-que-reconhecem-voz-e-transformam-em-texto)
+- [Requisição e Interpretação de Dados Vindos da Web](#requisicao-e-interpretacao-de-dados-vindos-da-web)
 - [Tratamento de Erros](#tratamento-de-erros)
 - [Aprendizados Efetivos](#aprendizados-efetivos)
 
@@ -28,8 +27,39 @@ Aqui você pode escrever uma breve apresentação sobre você, seus interesses e
 ## Projeto 1 - Fatec
 Breve descrição do projeto desenvolvido na Fatec.
 
-## Parceiro Academico
-Nome do parceiro acadêmico ou instituição.
+<h2 align='center'>Integrantes do projeto</h2> 
+<table align='center'>
+    <tr>
+        <td>Nomes dos integrantes</td>
+        <td>RA</td>
+        <td>Perfil de usuário</td>
+        <td>Área de atuação</td>
+    </tr>
+    <tr>
+        <td>Gustavo Assis Duran</td>
+        <td>2511432511009</td>
+        <td>Gustavo Assis Duran</td>
+        <td>Estudante de desenvolvimento Back-end</td>
+    </tr>
+    <tr>
+        <td>Vitor da Silva Gouveia</td>
+        <td>0030482121007</td>
+        <td>Giovanaasf</td>
+        <td>Estudante de desenvolvimento Front-end</td>
+    </tr>
+    <tr>
+        <td>Vinicius da Silva Gouveia</td>
+        <td>0030482121034</td>
+        <td>MyNameIsGustavo</td>
+        <td>Estudante de desenvolvimento Front-end e Mobile</td>
+    </tr>
+    <tr>
+        <td>Daniel</td>
+        <td>0030482121011</td>
+        <td>Nataly-costa</td>
+        <td>Estudante de desenvolvimento Back-end e Gestão de Projetos</td>
+    </tr>
+</table>
 
 ## Objetivo do Projeto
 Explicação clara do que o projeto pretende alcançar.
