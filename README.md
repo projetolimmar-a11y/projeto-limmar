@@ -34,32 +34,28 @@ Breve descrição do projeto desenvolvido na Fatec.
     <tr>
         <td>Nomes dos integrantes</td>
         <td>RA</td>
-        <td>Perfil de usuário</td>
         <td>Área de atuação</td>
     </tr>
     <tr>
         <td>Gustavo Assis Duran</td>
         <td>2511432511009</td>
-        <td>Gustavo Assis Duran</td>
-        <td>Estudante de desenvolvimento Back-end</td>
+        <td>Estudante de desenvolvimento Back-end e  Front-end </td>
     </tr>
     <tr>
         <td>Vitor da Silva Gouveia</td>
-        <td>0030482121007</td>
-        <td>Giovanaasf</td>
-        <td>Estudante de desenvolvimento Front-end</td>
+        <td>2511432511006</td>
+        <td>Estudante de desenvolvimento Back-end e Front-end</td>
     </tr>
     <tr>
         <td>Vinicius da Silva Gouveia</td>
-        <td>0030482121034</td>
-        <td>MyNameIsGustavo</td>
-        <td>Estudante de desenvolvimento Front-end e Mobile</td>
+        <td>2511432511007 </td>
+        <td>Product Owner (PO) - Levantamento de requisitos.
+</td>
     </tr>
     <tr>
-        <td>Daniel</td>
-        <td>0030482121011</td>
-        <td>Nataly-costa</td>
-        <td>Estudante de desenvolvimento Back-end e Gestão de Projetos</td>
+        <td>Daniel Moreira Gonçalves da Silva</td>
+        <td>2511432511023</td>
+        <td>scrum master</td>
     </tr>
 </table>
 
