@@ -6,13 +6,13 @@
   <title>LIMMAR USINAGEM — Progresso do Projeto</title>
   <style>
     :root{
-      --pct-final: 70;     /* << Altere aqui o percentual desejado (0 a 100) */
-      --pct: 0;            /* usado pela animação */
+      --pct-final: 70;    
+      --pct: 0;           
       --cor-ok: #2e95cc;
       --cor-bg: #e6e6e6;
-      --espessura: 44px;   /* "altura" da pizza 3D (espessura) */
-      --diametro: 260px;   /* tamanho do gráfico */
-      --duracao: 1600ms;   /* duração da animação de entrada */
+      --espessura: 44px;  
+      --diametro: 260px;  
+      --duracao: 1600ms;   
       --raio: calc(var(--diametro) / 2);
     }
 
@@ -52,7 +52,6 @@
       text-align: center;
     }
 
-    /* --- Gráfico circular (donut) com "look" 3D --- */
     .donut3d{
       position: relative;
       width: var(--diametro);
@@ -64,7 +63,6 @@
       animation: fillProgress var(--duracao) ease-out forwards;
     }
 
-    /* topo da pizza: conic-gradient animado por --pct */
     .donut3d .topo{
       position: absolute;
       inset: 0;
@@ -73,14 +71,12 @@
         conic-gradient(var(--cor-ok) calc(var(--pct) * 1%), var(--cor-bg) 0);
       display: grid;
       place-items: center;
-      /* "furo" central */
       -webkit-mask:
         radial-gradient(circle at center, transparent calc(var(--raio) - 52px), #000 calc(var(--raio) - 52px));
               mask:
         radial-gradient(circle at center, transparent calc(var(--raio) - 52px), #000 calc(var(--raio) - 52px));
     }
 
-    /* aro superior (para ter um chanfrado sutil) */
     .donut3d .borda{
       position: absolute;
       inset: 0;
@@ -92,7 +88,6 @@
       pointer-events: none;
     }
 
-    /* lateral (espessura) da pizza */
     .donut3d::before{
       content:"";
       position: absolute;
@@ -112,13 +107,12 @@
       filter: saturate(0.9);
     }
 
-    /* rótulo central (valor) — renderizado em um plano próprio para não inclinar o texto */
     .label{
       position: absolute;
       inset: 0;
       display: grid;
       place-items: center;
-      transform: rotateZ(90deg) rotateX(-18deg); /* desfaz a inclinação visual */
+      transform: rotateZ(90deg) rotateX(-18deg); 
       pointer-events: none;
     }
 
@@ -140,7 +134,6 @@
       text-transform: uppercase;
     }
 
-    /* botão de exemplo para trocar o percentual */
     .controls{
       display: flex;
       gap: 12px;
@@ -164,8 +157,8 @@
 </head>
 <body>
   <div class="wrap">
-    <h1># LIMMAR USINAGEM</h1>
-    <p class="sub">Progresso de produção • Exemplo de pizza 3D animada</p>
+    <h1>LIMMAR USINAGEM</h1>
+    <p class="sub">Progresso de produção</p>
 
     <div class="donut3d" id="grafico">
       <div class="topo"></div>
@@ -187,7 +180,6 @@
   </div>
 
   <script>
-    // Configuração inicial
     const root = document.documentElement;
     const valorEl = document.getElementById('valor');
     const slider = document.getElementById('slider');
@@ -195,7 +187,6 @@
     const btn90 = document.getElementById('btn90');
     const btnReset = document.getElementById('btnReset');
 
-    // Atualiza o texto do centro durante a animação
     let animFrame;
     function animateCounter(from, to, dur = 900){
       cancelAnimationFrame(animFrame);
@@ -209,23 +200,18 @@
       animFrame = requestAnimationFrame(tick);
     }
 
-    // Rodar a animação de entrada com base em --pct-final
     window.addEventListener('load', () => {
       const alvo = parseFloat(getComputedStyle(root).getPropertyValue('--pct-final')) || 0;
       animateCounter(0, alvo);
-      // Após a animação CSS, certifique-se do valor final no centro
       setTimeout(() => valorEl.innerHTML = Math.round(alvo) + "<small>%</small>", 1800);
       slider.value = alvo;
     });
 
-    // Interação: alterar a porcentagem ao mexer no slider
     function setPercent(p){
       p = Math.max(0, Math.min(100, Number(p) || 0));
       root.style.setProperty('--pct-final', p);
-      // Reinicia a animação do preenchimento
       root.style.setProperty('--pct', 0);
       document.getElementById('grafico').style.animation = 'none';
-      // força reflow
       void document.getElementById('grafico').offsetWidth;
       document.getElementById('grafico').style.animation = '';
       animateCounter(parseInt(valorEl.textContent) || 0, p);
