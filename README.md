@@ -17,7 +17,7 @@
 ---
 
 ## Introducao
-Aqui você pode escrever uma breve apresentação sobre você, seus interesses e objetivo do portfólio.
+Somos um grupo de quatro estudantes que estudam tecnologia na faculdade FATEC. Neste portfólio, apresentamos o desenvolvimento de um sistema de monitoramento de desgaste de ferramentas, criado especialmente para a empresa Limmar. Nosso principal objetivo com este projeto é contribuir para a melhoria da eficiência produtiva da empresa, auxiliando na redução de custos e no aumento da qualidade de suas ferramentas e produtos. Este trabalho representa não apenas uma aplicação prática dos nossos conhecimentos, mas também o nosso compromisso com soluções que geram impacto real no setor industrial.
 
 ## Meus Principais Conhecimentos
 - Linguagens de Programação: Python, JavaScript, PHP...
@@ -25,7 +25,7 @@ Aqui você pode escrever uma breve apresentação sobre você, seus interesses e
 - Outras Habilidades: Git, SQL, APIs, Testes Automatizados...
 
 ## Projeto 1 - Fatec
-Breve descrição do projeto desenvolvido na Fatec.
+Nosso projeto é um sistema de desgaste de ferramentas com todas as informações que devem ser colocadas, como: id, nome, horário de entrada e de saída, datas, peças feitas, entre outras informações. Com isso, faz com que temos todas as informações da ferramenta até ela estragar, garantindo se ela é boa o suficiente para fabricação de peças, se está valendo o preço pago por ela e se outras marcas de ferramentas são melhores ou não que aquelas.
 
 [Veja o gráfico de produção](https://projetolimmar-a11y.github.io/projeto-limmar/)
 
@@ -60,7 +60,7 @@ Breve descrição do projeto desenvolvido na Fatec.
 </table>
 
 ## Objetivo do Projeto
-Explicação clara do que o projeto pretende alcançar.
+O principal objetivo deste projeto é compreender as necessidades da empresa e oferecer soluções tecnológicas eficazes para os desafios que ela enfrenta, especialmente no que se refere ao controle de desgaste em seu setor. Através da aplicação de nossos conhecimentos em programação e desenvolvimento de sistemas, buscamos criar uma ferramenta que otimize os processos internos, aumente a eficiência operacional e reduza falhas causadas pela ausência de um monitoramento adequado.
 
 ## Tecnologias Utilizadas
 - Tecnologia 1
