@@ -70,7 +70,7 @@ O principal objetivo deste projeto é compreender as necessidades da empresa e o
 - PHP e JS
 - React
 
-## Contribuicoes Pessoais
+## Contribuições Pessoais
 - Gustavo (Programador): Desenvolvedor Back-end. Front-end  e analista de softwere
 - Vitor (Programador): Desenvolvedor Back-end. Front-end  e analista de dados
 - Vinícius (Product Owner): levantamento de requisitos e documentação
