@@ -14,7 +14,7 @@
 
 ---
 
-## Introducao
+## Introdução
 Somos um grupo de quatro estudantes que estudam tecnologia na faculdade FATEC. Neste portfólio, apresentamos o desenvolvimento de um sistema de monitoramento de desgaste de ferramentas, criado especialmente para a empresa Limmar. Nosso principal objetivo com este projeto é contribuir para a melhoria da eficiência produtiva da empresa, auxiliando na redução de custos e no aumento da qualidade de suas ferramentas e produtos. Este trabalho representa não apenas uma aplicação prática dos nossos conhecimentos, mas também o nosso compromisso com soluções que geram impacto real no setor industrial.
 
 ## Meus Principais Conhecimentos
