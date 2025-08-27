@@ -39,12 +39,12 @@ Breve descrição do projeto desenvolvido na Fatec.
     <tr>
         <td>Gustavo Assis Duran</td>
         <td>2511432511009</td>
-        <td>Estudante de desenvolvimento Back-end e  Front-end </td>
+        <td>Desenvolvedor Back-end e  Front-end </td>
     </tr>
     <tr>
         <td>Vitor da Silva Gouveia</td>
         <td>2511432511006</td>
-        <td>Estudante de desenvolvimento Back-end e Front-end</td>
+        <td>Desenvolvedor Back-end e Front-end</td>
     </tr>
     <tr>
         <td>Vinicius da Silva Gouveia</td>
