@@ -81,4 +81,4 @@ O principal objetivo deste projeto é compreender as necessidades da empresa e o
 - Quando a pessoa adiciona a mesma peça ele automaticamente denomia um ID diferente para que não tenha IDS iguais, assim fica mais difícil de ter erro de logistica 
 
 ## Aprendizados Efetivos
- trabalho em equipe, desenvolvimento de sites, aprendizado em linguagen de programação.
+ Trabalho Em Equipe, Desenvolvimento De Sites, Aprendizado Em Linguagem De Programação.
