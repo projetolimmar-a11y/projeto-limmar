@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import "./RecordsScreen.css";
 import ObservationModal from "./ObservationModal";
 
 function RecordsScreen({ apiBase, token, onDeleteRecord, onAddFailure }) {
@@ -64,6 +65,38 @@ function RecordsScreen({ apiBase, token, onDeleteRecord, onAddFailure }) {
     };
 
     loadData();
+    // SSE para atualizações em tempo real (record_created, record_updated, failure_created, tool_created)
+    let es;
+    try {
+      const streamUrl = apiBase ? `${apiBase.replace(/\/$/, '')}/api/stream` : 'http://localhost:3001/api/stream';
+      es = new EventSource(streamUrl);
+      es.addEventListener('record_created', (e) => {
+        try {
+          const data = JSON.parse(e.data);
+          setRecords(prev => [data, ...prev]);
+        } catch (err) { console.warn('record_created parse', err); }
+      });
+      es.addEventListener('record_updated', (e) => {
+        try {
+          const data = JSON.parse(e.data);
+          setRecords(prev => {
+            const idx = prev.findIndex(r => String(r.id) === String(data.id));
+            if (idx === -1) return [data, ...prev];
+            const cp = [...prev]; cp[idx] = data; return cp;
+          });
+        } catch (err) { console.warn('record_updated parse', err); }
+      });
+      es.addEventListener('failure_created', (e) => {
+        try { const data = JSON.parse(e.data); setFailures(prev => [data, ...prev]); } catch (err) { console.warn('failure_created parse', err); }
+      });
+      es.addEventListener('tool_created', (e) => {
+        try { const data = JSON.parse(e.data); setTools(prev => [data, ...prev]); } catch (err) { console.warn('tool_created parse', err); }
+      });
+    } catch (err) {
+      console.warn('SSE not available in RecordsScreen', err);
+    }
+
+    return () => { if (es) es.close(); };
   }, [apiBase, token]);
   // aplica filtros de busca, ferramenta e intervalo de datas
   const filteredRecords = records.filter((record) => {
@@ -120,15 +153,18 @@ function RecordsScreen({ apiBase, token, onDeleteRecord, onAddFailure }) {
       setFailures((prev) => [...prev, localFailure]);
 
       const failureDate = new Date(localFailure.failure_datetime);
+      let updatedCount = 0;
       const updatedRecords = records.map((r) => {
-        if (r.tool_id === selectedRecord.tool_id) {
+        if (String(r.tool_id) === String(selectedRecord.tool_id)) {
           const recordDate = new Date(r.entry_datetime || r.created_at);
           if (recordDate <= failureDate) {
+            updatedCount++;
             return { ...r, status: 'falhou' };
           }
         }
         return r;
       });
+      console.debug(`saveObservation: updated ${updatedCount} records for tool ${selectedRecord.tool_id}`);
       setRecords(updatedRecords);
 
       // Tenta persistir no backend; se der certo, substitui a falha local pela do servidor
@@ -246,8 +282,11 @@ function RecordsScreen({ apiBase, token, onDeleteRecord, onAddFailure }) {
       <div className="search-bar">
         <div className="search-input">
           <div className="select-wrapper">
+            <label htmlFor="filter-tool" style={{ display: 'none' }}>Selecionar ferramenta</label>
             <select 
-              className="form-control"
+              id="filter-tool"
+              name="filter-tool"
+              className="form-control select-custom"
               value={selectedTool} 
               onChange={(e) => setSelectedTool(e.target.value)}
               style={{ minWidth: "250px" }}
@@ -260,6 +299,8 @@ function RecordsScreen({ apiBase, token, onDeleteRecord, onAddFailure }) {
             </select>
           </div>
           <input
+            id="search-term"
+            name="search-term"
             type="text"
             className="form-control"
             placeholder="Buscar por ID ou máquina..."
@@ -271,17 +312,17 @@ function RecordsScreen({ apiBase, token, onDeleteRecord, onAddFailure }) {
 
       <div className="card">
         <div style={{ display: 'flex', gap: '0.75rem', marginBottom: '0.75rem', alignItems: 'center' }}>
-          <div style={{ display: 'flex', gap: '0.5rem', alignItems: 'center' }}>
-            <label style={{ color: 'var(--text-muted)' }}>Data início</label>
-            <input type="date" className="form-control" value={dateRange.start} onChange={(e) => _setDateRange({ ...dateRange, start: e.target.value })} />
+            <div style={{ display: 'flex', gap: '0.5rem', alignItems: 'center' }}>
+            <label htmlFor="date-start" style={{ color: 'var(--text-muted)' }}>Data início</label>
+            <input id="date-start" name="date-start" type="date" className="form-control small" value={dateRange.start} onChange={(e) => _setDateRange({ ...dateRange, start: e.target.value })} />
           </div>
           <div style={{ display: 'flex', gap: '0.5rem', alignItems: 'center' }}>
-            <label style={{ color: 'var(--text-muted)' }}>Data fim</label>
-            <input type="date" className="form-control" value={dateRange.end} onChange={(e) => _setDateRange({ ...dateRange, end: e.target.value })} />
+            <label htmlFor="date-end" style={{ color: 'var(--text-muted)' }}>Data fim</label>
+            <input id="date-end" name="date-end" type="date" className="form-control small" value={dateRange.end} onChange={(e) => _setDateRange({ ...dateRange, end: e.target.value })} />
           </div>
           <div style={{ display: 'flex', gap: '0.5rem', alignItems: 'center' }}>
-            <label style={{ color: 'var(--text-muted)' }}>Threshold acumulado</label>
-            <input type="number" className="form-control" style={{ width: 120 }} value={accumThreshold} onChange={(e) => setAccumThreshold(Number(e.target.value) || 0)} />
+            <label htmlFor="accum-threshold" style={{ color: 'var(--text-muted)' }}>Threshold acumulado</label>
+            <input id="accum-threshold" name="accum-threshold" type="number" className="form-control small" style={{ width: 120 }} value={accumThreshold} onChange={(e) => setAccumThreshold(Number(e.target.value) || 0)} />
           </div>
           <div style={{ marginLeft: 'auto' }}>
             <button className="btn btn-small" onClick={exportFilteredCsv}>Exportar CSV</button>
@@ -319,9 +360,22 @@ function RecordsScreen({ apiBase, token, onDeleteRecord, onAddFailure }) {
                 } else if (st === 'falha') {
                   statusClass = 'status-inactive';
                   statusLabel = 'Falha';
+                } else if (st === 'in_progress' || st === 'inprogress') {
+                  statusClass = 'status-maintenance';
+                  statusLabel = 'Em Progresso';
+                } else if (st === 'completed' || st === 'concluído') {
+                  statusClass = 'status-active';
+                  statusLabel = 'Concluído';
+                } else if (st === 'interrupted' || st === 'interrompido') {
+                  statusClass = 'status-inactive';
+                  statusLabel = 'Interrompido';
                 } else {
                   // qualquer outro status explícito, mostrar como está (capitalizando a primeira letra)
-                  statusLabel = String(r.status).charAt(0).toUpperCase() + String(r.status).slice(1);
+                  statusLabel = String(r.status)
+                    .replace(/_/g, ' ')
+                    .split(' ')
+                    .map(word => word.charAt(0).toUpperCase() + word.slice(1))
+                    .join(' ');
                 }
               } else if (hasRecentFailure) {
                 statusClass = 'status-inactive';

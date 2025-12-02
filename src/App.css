@@ -1,34 +1,4 @@
-/* Layout do dashboard */
-.dashboard-row {
-  display: flex;
-  gap: 1.5rem;
-  width: 100%;
-  margin-bottom: 1.5rem;
-}
-
-.dashboard-section {
-  flex: 1;
-  min-width: 0;
-  background: var(--bg-card);
-  border-radius: 8px;
-  padding: 1.5rem;
-  box-shadow: var(--shadow);
-  border: 1px solid var(--border-color);
-  display: flex;
-  flex-direction: column;
-}
-
-.dashboard-section h2 {
-  font-size: 1.1rem;
-  margin-bottom: 1rem;
-  color: var(--text-title);
-}
-@media (max-width: 900px) {
-  .dashboard-row {
-    flex-direction: column;
-    gap: 1rem;
-  }
-}
+/* Dashboard layout moved to src/components/DashboardScreen.css */
 :root {
   /* Cores base (tema usinagem industrial) */
   /* Tons escuros com leve brilho metálico */
@@ -64,51 +34,14 @@
   --border-color: rgba(255,255,255,0.08);
   --input-bg: rgba(255,255,255,0.02);
   --shadow: 0 8px 24px rgba(0,0,0,0.25), 0 2px 8px rgba(0,0,0,0.15);
-  --shadow-hover: 0 12px 36px rgba(0,0,0,0.3), 0 4px 12px rgba(0,0,0,0.2);
   
   /* Efeitos metálicos */
   --metal-shine: linear-gradient(135deg, rgba(255,255,255,0.05) 0%, transparent 50%, rgba(255,255,255,0.02) 100%);
   --metal-edge: 0 0 0 1px var(--border-color), inset 0 1px rgba(255,255,255,0.05);
 }
 
-/* Reset e base */
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-  font-family: "Segoe UI", sans-serif;
-}
+/* Autocomplete and tools dropdown moved to src/components/ToolsScreen.css and Records/NewRecord CSS files */
 
-/* Configuração base do HTML e body */
-html {
-  height: 100%;
-}
-
-body {
-  min-height: 100%;
-  background: url("/fundo.jpg") no-repeat center center fixed;
-  background-size: cover;
-  color: var(--text-main);
-  display: flex;
-  flex-direction: column;
-}
-
-/* Layout containers */
-.dashboard-container,
-.records-container,
-.reports-container,
-.tools-container,
-.new-record-container {
-  width: 100%;
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 1.5rem;
-  display: flex;
-  flex-direction: column;
-  gap: 1.5rem;
-}
-
-/* Footer sempre transparente */
 .footer {
   background: transparent;
 }
@@ -349,186 +282,7 @@ h2, .card-title {
   width: 100%;
 }
 
-/* Tools card: remove internal scrolling so page scrolls naturally */
-/* Estilo industrial para a aba Ferramentas */
-.tools-card {
-  background: linear-gradient(165deg, var(--bg-card), var(--bg-card-alt));
-  border: 1px solid var(--border-color);
-  box-shadow: var(--shadow), inset 0 1px rgba(255,255,255,0.05);
-  position: relative;
-}
-
-.tools-card::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  height: 180px;
-  background: var(--metal-shine);
-  opacity: 0.15;
-  pointer-events: none;
-  border-radius: 12px 12px 0 0;
-}
-
-.tools-card .table-container {
-  position: relative;
-  z-index: 1;
-}
-
-.tools-card .table {
-  background: linear-gradient(180deg, rgba(22,27,31,0.8), rgba(19,23,25,0.9));
-  box-shadow: 0 4px 16px rgba(0,0,0,0.2);
-  border: 1px solid var(--border-color);
-}
-
-.tools-card .table th {
-  background: linear-gradient(180deg, rgba(0,0,0,0.4), rgba(0,0,0,0.2));
-  color: var(--accent-color);
-  font-weight: 600;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
-  font-size: 0.85rem;
-  padding: 1rem 1.25rem;
-  border-bottom: 2px solid var(--border-color);
-}
-
-.tools-card .table td {
-  padding: 1rem 1.25rem;
-  color: var(--text-main);
-  border-bottom: 1px solid rgba(255,255,255,0.06);
-}
-
-/* Adiciona efeito de máquina nos status das ferramentas */
-.table-container {
-  overflow: visible;
-  max-height: none;
-}
-
-/* Campo de ferramenta - visual industrial */
-.tool-input-container {
-  position: relative;
-  width: 100%;
-}
-
-.tool-input-wrapper {
-  position: relative;
-  width: 100%;
-}
-
-.tool-input-wrapper .form-control {
-  width: 100%;
-  background: linear-gradient(180deg, rgba(255,255,255,0.02), transparent);
-  border: 1px solid var(--border-color);
-  box-shadow: var(--metal-edge);
-  height: 42px;
-}
-
-.tool-input-wrapper::after {
-  content: '';
-  position: absolute;
-  top: 1px;
-  left: 1px;
-  right: 1px;
-  height: 50%;
-  background: var(--metal-shine);
-  border-radius: 4px 4px 0 0;
-  pointer-events: none;
-  opacity: 0.5;
-}
-
-/* Área de ações do formulário - botões alinhados */
-.form-actions {
-  display: flex;
-  align-items: center;
-  gap: 1rem;
-  justify-content: flex-end;
-  margin-top: 2rem;
-  padding-top: 1rem;
-  border-top: 1px solid var(--border-color);
-}
-
-/* Botão cancelar à esquerda, outros à direita */
-.form-actions .btn-ghost:first-child {
-  margin-right: auto;
-}
-
-/* Ajuste dos botões na área de ações */
-.form-actions .btn {
-  min-width: fit-content;
-  white-space: nowrap;
-  padding: 0 1.25rem;
-}
-
-/* Botões de ação */
-.form-actions .btn {
-  height: 42px;
-  padding: 0 1.25rem;
-  display: inline-flex;
-  align-items: center;
-  gap: 0.5rem;
-  white-space: nowrap;
-}
-
-/* Botão cancelar à esquerda, outros à direita */
-.form-actions .btn-ghost {
-  margin-right: auto;
-}
-
-.tool-input-container > button svg {
-  width: 16px;
-  height: 16px;
-}
-
-.tool-input-container > button:hover {
-  background: var(--bg-hover);
-  border-color: var(--accent-color);
-  box-shadow: 0 0 15px rgba(93,223,255,0.15);
-  transform: translateY(-1px);
-}
-
-/* Ajustes do autocomplete */
-.autocomplete-list {
-  margin-top: 4px;
-  background: linear-gradient(180deg, var(--bg-card), var(--bg-card-alt));
-  border: 1px solid var(--border-color);
-  box-shadow: var(--shadow);
-  border-radius: 8px;
-  backdrop-filter: blur(10px);
-}
-
-.autocomplete-item {
-  padding: 10px 12px;
-  border-bottom: 1px solid var(--border-color);
-  transition: all 0.15s ease;
-  position: relative;
-  overflow: hidden;
-}
-
-.autocomplete-item:hover,
-.autocomplete-item.active {
-  background: var(--metal-shine);
-}
-
-.autocomplete-item:last-child {
-  border-bottom: none;
-}
-
-.autocomplete-item::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  height: 50%;
-  background: var(--metal-shine);
-  opacity: 0;
-  transition: opacity 0.2s ease;
-}
-
-.autocomplete-item:hover::before {
-  opacity: 1;
-}
+/* Tools-related and autocomplete styles moved into component CSS files */
 
 
 /* Status */
@@ -820,7 +574,7 @@ input[type="text"].form-control {
 
 /* Padronizar inputs numéricos */
 input[type="number"].form-control {
-  background: rgba(0, 0, 0, 0.2);
+  background: rgba(13, 17, 23, 0.85);
   border: 1px solid rgba(255, 255, 255, 0.1);
 }
 
@@ -1403,15 +1157,16 @@ input[type="datetime-local"].form-control::-webkit-calendar-picker-indicator {
 
 .select-wrapper select {
   width: 100%;
-  background: rgba(16, 20, 24, 0.6);
-  border: 1px solid rgba(93, 223, 255, 0.2);
-  color: var(--text-secondary);
+  background: rgba(16, 20, 24, 0.8);
+  border: 1px solid rgba(93, 223, 255, 0.3);
+  color: var(--text-main);
   padding: 0.75rem 2.5rem 0.75rem 1rem;
   border-radius: 6px;
   appearance: none;
   cursor: pointer;
   transition: all 0.2s ease;
   font-size: 0.95rem;
+  font-weight: 500;
 }
 
 .select-wrapper select option {
@@ -1436,124 +1191,21 @@ input[type="datetime-local"].form-control::-webkit-calendar-picker-indicator {
   box-shadow: 0 0 0 2px rgba(93, 223, 255, 0.1);
 }
 
-/* Estilos do Modal - Tema Industrial */
-.modal-overlay {
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background: rgba(0, 0, 0, 0.85);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  z-index: 1000;
-  backdrop-filter: blur(5px);
-  transition: all 0.3s ease;
+/* Destaque visual para ferramenta com acumulado alto */
+.tool-highlight td:first-child {
+  border-left: 4px solid var(--accent-color);
+}
+.tool-highlight td:last-child {
+  border-right: 4px solid var(--accent-color);
+}
+.tool-highlight td {
+  transition: box-shadow 200ms ease, transform 120ms ease;
+}
+.tool-highlight td:hover {
+  transform: translateY(-2px);
 }
 
-.modal {
-  background: linear-gradient(145deg, #161b1f, #131719);
-  padding: 2rem;
-  border-radius: 12px;
-  width: 90%;
-  max-width: 550px;
-  position: relative;
-  border: 1px solid rgba(93, 223, 255, 0.1);
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
-  transform: translateY(0);
-  transition: all 0.3s ease;
-}
-
-.modal-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 1.5rem;
-  padding-bottom: 1rem;
-  border-bottom: 1px solid rgba(93, 223, 255, 0.15);
-  position: relative;
-}
-
-.modal-header::after {
-  content: '';
-  position: absolute;
-  bottom: -1px;
-  left: 0;
-  width: 100%;
-  height: 1px;
-  background: linear-gradient(90deg, 
-    transparent, 
-    rgba(93, 223, 255, 0.3),
-    transparent
-  );
-}
-
-.modal-title {
-  font-size: 1.25rem;
-  font-weight: 600;
-  color: var(--text-title);
-  letter-spacing: 0.5px;
-  text-transform: uppercase;
-}
-
-.modal-close {
-  background: none;
-  border: none;
-  padding: 0.5rem;
-  cursor: pointer;
-  color: var(--text-muted);
-  transition: all 0.2s ease;
-}
-
-.modal-close:hover {
-  color: var(--accent-color);
-  transform: rotate(90deg);
-}
-
-.modal textarea.form-control {
-  background: rgba(16, 20, 24, 0.6);
-  border: 1px solid rgba(93, 223, 255, 0.2);
-  color: var(--text-main);
-  padding: 1rem;
-  border-radius: 8px;
-  resize: vertical;
-  min-height: 120px;
-  font-size: 0.95rem;
-  line-height: 1.5;
-  transition: all 0.2s ease;
-}
-
-.modal textarea.form-control:focus {
-  border-color: var(--accent-color);
-  box-shadow: 0 0 0 2px rgba(93, 223, 255, 0.1);
-  outline: none;
-}
-
-.modal button {
-  padding: 0.75rem 1.5rem;
-  font-weight: 500;
-  letter-spacing: 0.5px;
-  transition: all 0.2s ease;
-}
-
-.modal button.btn-primary {
-  background: linear-gradient(45deg, var(--accent-color-dark), var(--accent-color));
-  border: none;
-  box-shadow: 0 4px 12px rgba(93, 223, 255, 0.2);
-}
-
-.modal button.btn-primary:hover {
-  transform: translateY(-1px);
-  box-shadow: 0 6px 16px rgba(93, 223, 255, 0.3);
-}
-
-.modal button.btn-primary:disabled {
-  background: linear-gradient(45deg, #2a3035, #1e2428);
-  box-shadow: none;
-  cursor: not-allowed;
-  opacity: 0.7;
-}
+/* Modal styles moved to src/components/ObservationModal.css */
 
 /* Layout das Ferramentas */
 .tools-container {

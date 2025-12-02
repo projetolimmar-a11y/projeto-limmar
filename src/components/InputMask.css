@@ -1,0 +1,9 @@
+.input-mask-group {
+  display: block;
+}
+
+.input-mask-group .form-control {
+  width: 100%;
+}
+
+/* Ajustes específicos para inputs com máscara podem ser feitos aqui */

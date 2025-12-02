@@ -1,0 +1,47 @@
+.records-container { }
+
+.records-container .table-container { overflow:auto; }
+
+.autocomplete-list { z-index: 60; }
+
+/* Regras locais para paginação e listagem */
+
+/* Autocomplete moved from App.css */
+.autocomplete-list {
+	margin-top: 4px;
+	background: linear-gradient(180deg, var(--bg-card), var(--bg-card-alt));
+	border: 1px solid var(--border-color);
+	box-shadow: var(--shadow);
+	border-radius: 8px;
+	backdrop-filter: blur(10px);
+}
+
+.autocomplete-item {
+	padding: 10px 12px;
+	border-bottom: 1px solid var(--border-color);
+	transition: all 0.15s ease;
+	position: relative;
+	overflow: hidden;
+}
+
+.autocomplete-item:hover,
+.autocomplete-item.active {
+	background: var(--metal-shine);
+}
+
+.autocomplete-item:last-child { border-bottom: none; }
+
+.autocomplete-item::before {
+	content: '';
+	position: absolute;
+	top: 0;
+	left: 0;
+	right: 0;
+	height: 50%;
+	background: var(--metal-shine);
+	opacity: 0;
+	transition: opacity 0.2s ease;
+}
+
+.autocomplete-item:hover::before { opacity: 1; }
+

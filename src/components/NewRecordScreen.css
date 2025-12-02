@@ -1,0 +1,309 @@
+/* ================================
+   NOVO REGISTRO DE PRODUÇÃO
+   Estilo Industrial Minimalista
+   ================================ */
+
+/* Container */
+.new-record-container {
+	max-width: 1000px;
+	margin: 0 auto;
+	padding: 2rem;
+}
+
+/* Card */
+.new-record-card {
+	background: linear-gradient(135deg, rgba(15, 23, 42, 0.8) 0%, rgba(20, 30, 48, 0.85) 100%);
+	border: 1px solid rgba(93, 223, 255, 0.15);
+	box-shadow: 
+		0 20px 60px rgba(0, 0, 0, 0.5),
+		inset 0 1px 0 rgba(93, 223, 255, 0.1),
+		0 0 30px rgba(93, 223, 255, 0.05);
+	border-radius: 16px;
+	padding: 2.5rem;
+	position: relative;
+	overflow: hidden;
+	backdrop-filter: blur(10px);
+}
+
+.new-record-card::before {
+	content: '';
+	position: absolute;
+	top: 0;
+	left: 0;
+	right: 0;
+	height: 2px;
+	background: linear-gradient(90deg, transparent, rgba(93, 223, 255, 0.3), transparent);
+}
+
+/* Grid Layout */
+.new-record-card .form-grid {
+	display: grid;
+	/* Topo: 3 colunas para Ferramenta / Máquina / Peças. Datas ficam na linha abaixo */
+	grid-template-columns: 1.4fr 1fr 0.9fr;
+	gap: 1rem 1rem;
+	position: relative;
+	z-index: 1;
+	align-items: start;
+}
+
+/* Data/Hora: ocupam toda a largura do grid e ficam lado a lado */
+.datetime-row {
+	grid-column: 1 / -1;
+	/* use flex to guarantee equal-width columns across browsers */
+	display: flex;
+	gap: 1rem;
+	width: 100%;
+	align-items: flex-start;
+	flex-wrap: nowrap;
+}
+
+/* Force datetime inputs to behave identically inside the row */
+.datetime-row .form-group {
+	min-width: 0; /* allow flex items to shrink equally */
+	flex: 1 1 0;
+}
+.datetime-row .form-control.datetime-control {
+	width: 100%;
+	box-sizing: border-box;
+}
+
+/* Garantir altura idêntica e padding consistente para inputs de data/hora */
+.datetime-row .form-control.datetime-control {
+	height: 38px;
+	padding: 0.55rem 0.9rem;
+}
+
+/* Regras mais específicas para sobrescrever quaisquer estilos conflitantes */
+.new-record-card .datetime-row > .form-group {
+	min-width: 0 !important;
+}
+.new-record-card .datetime-row > .form-group .form-control.datetime-control {
+	display: block !important;
+	width: 100% !important;
+	min-width: 0 !important;
+	max-width: 100% !important;
+}
+
+/* Forçar cada célula da datetime-row a ocupar igualmente o espaço da coluna do grid */
+.new-record-card .datetime-row {
+	grid-auto-columns: 1fr !important;
+}
+.new-record-card .datetime-row > .form-group {
+	width: 100% !important;
+}
+
+/* Responsivo: em telas médias volta para 2 colunas, em pequenas para 1 coluna */
+@media (max-width: 1100px) {
+	.new-record-card .form-grid {
+		grid-template-columns: 1fr 1fr;
+		gap: 1rem 1rem;
+	}
+	.datetime-row {
+		grid-template-columns: repeat(2, minmax(0, 1fr));
+	}
+}
+
+@media (max-width: 600px) {
+	.new-record-card .form-grid {
+		grid-template-columns: 1fr;
+	}
+	.datetime-row {
+		grid-template-columns: 1fr;
+	}
+}
+
+/* (regras antigas de span removidas) */
+
+/* Form Group */
+.form-group {
+	display: flex;
+	flex-direction: column;
+	position: relative;
+	align-items: stretch;
+	align-self: start;
+}
+
+/* Labels */
+.form-group label {
+	display: flex;
+	align-items: center;
+	gap: 10px;
+	font-weight: 700;
+	margin-bottom: 6px;
+	font-size: 0.86rem;
+	letter-spacing: 0.6px;
+	text-transform: uppercase;
+	color: rgba(145, 235, 255, 0.95);
+	text-shadow: 0 0 8px rgba(93, 223, 255, 0.14);
+	min-height: 18px;
+}
+
+/* Inputs */
+.form-group input,
+.tool-input-wrapper .form-control {
+	width: 100%;
+	padding: 0.55rem 0.9rem;
+	font-size: 0.95rem;
+	background: linear-gradient(180deg, rgba(8,10,14,0.62) 0%, rgba(14,18,26,0.9) 100%);
+	border: 1px solid rgba(60, 95, 110, 0.32);
+	color: rgba(250, 250, 250, 0.96);
+	border-radius: 10px;
+	transition: all 0.22s ease;
+	box-shadow: inset 0 1px 6px rgba(0, 0, 0, 0.45);
+	font-family: 'Courier New', monospace;
+	height: 38px;
+	box-sizing: border-box;
+}
+
+/* Forçar inputs específicos a terem altura consistente e esconder spinners em number */
+input[type="number"],
+input[type="datetime-local"],
+input[type="text"] {
+	min-height: 38px;
+}
+
+/* remover setinhas do number para visual mais limpo */
+input[type=number]::-webkit-outer-spin-button,
+input[type=number]::-webkit-inner-spin-button {
+	-webkit-appearance: none;
+	margin: 0;
+}
+input[type=number] {
+	-moz-appearance: textfield;
+	appearance: textfield;
+}
+
+/* Input Focus */
+.form-group input:focus,
+.tool-input-wrapper .form-control:focus {
+	outline: none;
+	border-color: rgba(93, 223, 255, 0.56);
+	box-shadow: inset 0 1px 4px rgba(0,0,0,0.36), 0 0 12px rgba(93,223,255,0.16);
+	background: linear-gradient(180deg, rgba(8,10,14,0.78) 0%, rgba(18,24,36,0.98) 100%);
+}
+
+/* Placeholder */
+.form-group input::placeholder,
+.tool-input-wrapper .form-control::placeholder {
+	color: rgba(100, 116, 139, 0.7);
+	font-family: 'Courier New', monospace;
+}
+
+/* Ajuste fino para placeholder da ferramenta: fonte menor para caber mais texto */
+.tool-input-wrapper .form-control::placeholder {
+	font-size: 0.86rem;
+	opacity: 0.95;
+}
+
+/* reduzir ligeiramente a fonte do input da ferramenta para evitar corte do placeholder */
+.tool-input-wrapper .form-control {
+	font-size: 0.92rem;
+}
+
+/* Ferramenta com ícone */
+.tool-input-wrapper .form-control {
+	padding-left: 44px;
+	height: 38px;
+}
+
+/* Tool Container */
+.tool-input-container {
+	position: relative;
+	width: 100%;
+	display: flex;
+	gap: 0.5rem;
+	align-items: center;
+}
+
+.tool-input-wrapper {
+	flex: 1;
+	position: relative;
+	width: 100%;
+}
+
+.tool-input-container > button {
+	flex-shrink: 0;
+}
+
+.tool-input-container > button svg {
+	width: 16px;
+	height: 16px;
+}
+
+.tool-input-container > button:hover {
+	background: var(--bg-hover);
+	border-color: var(--accent-color);
+	box-shadow: 0 0 15px rgba(93, 223, 255, 0.15);
+	transform: translateY(-1px);
+}
+
+/* Ícones */
+.input-icon {
+	position: static;
+	width: 16px;
+	height: 16px;
+	margin-right: 8px;
+	flex-shrink: 0;
+	vertical-align: middle;
+	fill: rgba(125, 235, 255, 0.9);
+	opacity: 1;
+	filter: drop-shadow(0 0 4px rgba(93, 223, 255, 0.18));
+	transition: all 0.18s ease;
+}
+
+.form-group:hover .input-icon {
+	fill: rgba(180, 255, 255, 1);
+	filter: drop-shadow(0 0 8px rgba(93, 223, 255, 0.26));
+}
+
+/* Autocomplete */
+.autocomplete-list {
+	z-index: 60;
+}
+
+/* Botões */
+.form-actions {
+	display: flex;
+	align-items: center;
+	gap: 1rem;
+	justify-content: flex-end;
+	margin-top: 1.6rem;
+	padding-top: 1rem;
+	border-top: 1px solid rgba(60,80,100,0.12);
+}
+
+/* Hover verde para botão de salvar */
+.new-record-card .form-actions .btn-primary:hover {
+	background: linear-gradient(180deg, rgba(0,180,120,0.95), rgba(0,150,100,0.95));
+	border-color: rgba(0,150,100,0.9);
+	box-shadow: 0 6px 18px rgba(0,150,100,0.18), 0 0 8px rgba(0,200,140,0.12);
+	transform: translateY(-1px);
+}
+.new-record-card .form-actions .btn-primary:hover .btn-icon,
+.new-record-card .form-actions .btn-primary:hover svg {
+	fill: #eafff0 !important;
+}
+
+.form-actions .btn-ghost:first-child {
+	margin-right: auto;
+}
+
+.btn-with-icon {
+	display: inline-flex;
+	align-items: center;
+	gap: 0.5rem;
+	padding: 0.5rem 1rem;
+	border-radius: 8px;
+	transition: all 0.2s ease;
+}
+
+.btn-with-icon .btn-icon {
+	width: 20px;
+	height: 20px;
+	fill: var(--success-color);
+}
+
+.pulse-on-hover:hover {
+	transform: scale(1.02);
+	box-shadow: 0 0 0 2px var(--primary-color);
+}

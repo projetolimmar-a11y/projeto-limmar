@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import './NewRecordScreen.css';
 
 function NewRecordScreen({ tools, onAddRecord, onCancel, onOpenTools }) {
   const [formData, setFormData] = useState({
@@ -12,6 +13,14 @@ function NewRecordScreen({ tools, onAddRecord, onCancel, onOpenTools }) {
   const [toolQuery, setToolQuery] = useState("");
   const [showDropdown, setShowDropdown] = useState(false);
   const [activeIndex, setActiveIndex] = useState(-1);
+
+  const handleEntryDateTimeChange = (value) => {
+    setFormData({
+      ...formData,
+      entry_datetime: value,
+      exit_datetime: value, // Auto-fill exit with same value
+    });
+  };
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -56,7 +65,7 @@ function NewRecordScreen({ tools, onAddRecord, onCancel, onOpenTools }) {
         <form onSubmit={handleSubmit}>
           <div className="form-grid">
             <div className="form-group">
-              <label>
+              <label htmlFor="new-tool-query">
                 <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false" className="input-icon">
                   <path d="M12 8a4 4 0 1 0 0 8 4 4 0 0 0 0-8zm8.94 3.5a1 1 0 0 0-.82-.58l-1.7-.25a6.97 6.97 0 0 0-.64-1.55l.96-1.4a1 1 0 0 0-.18-1.27l-1.2-1.2a1 1 0 0 0-1.27-.18l-1.4.96c-.5-.25-1.03-.45-1.55-.64l-.25-1.7A1 1 0 0 0 12.5 2h-1a1 1 0 0 0-.98.86l-.25 1.7a6.97 6.97 0 0 0-1.55.64L7.32 4.24a1 1 0 0 0-1.27.18L4.85 5.62a1 1 0 0 0-.18 1.27l.96 1.4c-.25.5-.45 1.03-.64 1.55l-1.7.25A1 1 0 0 0 2 11.5v1a1 1 0 0 0 .86.98l1.7.25c.19.52.39 1.04.64 1.55l-.96 1.4a1 1 0 0 0 .18 1.27l1.2 1.2a1 1 0 0 0 1.27.18l1.4-.96c.5.25 1.03.45 1.55.64l.25 1.7a1 1 0 0 0 .98.86h1a1 1 0 0 0 .98-.86l.25-1.7c.52-.19 1.04-.39 1.55-.64l1.4.96a1 1 0 0 0 1.27-.18l1.2-1.2a1 1 0 0 0 .18-1.27l-.96-1.4c.25-.5.45-1.03.64-1.55l1.7-.25a1 1 0 0 0 .86-.98v-1z"/>
                 </svg>
@@ -65,9 +74,11 @@ function NewRecordScreen({ tools, onAddRecord, onCancel, onOpenTools }) {
                 <div className="tool-input-container">
                   <div className="tool-input-wrapper">
                     <input
+                      id="new-tool-query"
+                      name="new-tool-query"
                       type="text"
                       className="form-control"
-                      placeholder="Digite código ou descrição da ferramenta"
+                      placeholder="Digite código ou descrição"
                       value={toolQuery}
                       onChange={(e) => { setToolQuery(e.target.value); setShowDropdown(true); setActiveIndex(-1); }}
                       onFocus={() => setShowDropdown(true)}
@@ -129,11 +140,13 @@ function NewRecordScreen({ tools, onAddRecord, onCancel, onOpenTools }) {
               </div>
 
             <div className="form-group">
-              <label>
+              <label htmlFor="new-machine">
                 <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false" className="input-icon"><path d="M15 17v2h3v-2h-3zm3-8h-7v2h7V9zm0 4h-7v2h7v-2zm-11 0h-2v2h2v-2zm0-4h-2v2h2V9zm0-4h-2v2h2V5zm4 0v2h7V5h-7zm-4 8h-2v2h2v-2zm0 4h-2v2h2v-2z"/></svg>
                 Máquina *
               </label>
               <input
+                id="new-machine"
+                name="new-machine"
                 type="text"
                 className="form-control"
                 value={formData.machine}
@@ -144,11 +157,13 @@ function NewRecordScreen({ tools, onAddRecord, onCancel, onOpenTools }) {
             </div>
 
             <div className="form-group">
-              <label>
+              <label htmlFor="new-pieces">
                 <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false" className="input-icon"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-7 14h-2v-2h2v2zm0-4h-2V7h2v6z"/></svg>
                 Peças Produzidas *
               </label>
               <input
+                id="new-pieces"
+                name="new-pieces"
                 type="number"
                 className="form-control"
                 value={formData.pieces}
@@ -158,32 +173,38 @@ function NewRecordScreen({ tools, onAddRecord, onCancel, onOpenTools }) {
               {errors.pieces && <div className="error">{errors.pieces}</div>}
             </div>
 
-            <div className="form-group">
-              <label>
-                <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false" className="input-icon"><path d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10 10-4.5 10-10S17.5 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm.5-13H11v6l5.2 3.2.8-1.3-4.5-2.7V7z"/></svg>
-                Data/Hora de Entrada *
-              </label>
-              <input
-                type="datetime-local"
-                className="form-control"
-                value={formData.entry_datetime}
-                onChange={(e) => setFormData({ ...formData, entry_datetime: e.target.value })}
-              />
-              {errors.entry_datetime && <div className="error">{errors.entry_datetime}</div>}
-            </div>
+            <div className="datetime-row">
+              <div className="form-group">
+                <label htmlFor="new-exit">
+                  <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false" className="input-icon"><path d="M11.99 2C6.47 2 2 6.48 2 12s4.47 10 9.99 10C17.52 22 22 17.52 22 12S17.52 2 11.99 2zM12 20c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8zm.5-13H11v6l5.25 3.15.75-1.23-4.5-2.67z"/></svg>
+                  Data/Hora de Saída *
+                </label>
+                <input
+                  id="new-exit"
+                  name="new-exit"
+                  type="datetime-local"
+                  className="form-control datetime-control"
+                  value={formData.exit_datetime}
+                  onChange={(e) => setFormData({ ...formData, exit_datetime: e.target.value })}
+                />
+                {errors.exit_datetime && <div className="error">{errors.exit_datetime}</div>}
+              </div>
 
-            <div className="form-group">
-              <label>
-                <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false" className="input-icon"><path d="M11.99 2C6.47 2 2 6.48 2 12s4.47 10 9.99 10C17.52 22 22 17.52 22 12S17.52 2 11.99 2zM12 20c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8zm.5-13H11v6l5.25 3.15.75-1.23-4.5-2.67z"/></svg>
-                Data/Hora de Saída *
-              </label>
-              <input
-                type="datetime-local"
-                className="form-control"
-                value={formData.exit_datetime}
-                onChange={(e) => setFormData({ ...formData, exit_datetime: e.target.value })}
-              />
-              {errors.exit_datetime && <div className="error">{errors.exit_datetime}</div>}
+              <div className="form-group">
+                <label htmlFor="new-entry">
+                  <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false" className="input-icon"><path d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10 10-4.5 10-10S17.5 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm.5-13H11v6l5.2 3.2.8-1.3-4.5-2.7V7z"/></svg>
+                  Data/Hora de Entrada *
+                </label>
+                <input
+                  id="new-entry"
+                  name="new-entry"
+                  type="datetime-local"
+                  className="form-control datetime-control"
+                  value={formData.entry_datetime}
+                  onChange={(e) => handleEntryDateTimeChange(e.target.value)}
+                />
+                {errors.entry_datetime && <div className="error">{errors.entry_datetime}</div>}
+              </div>
             </div>
           </div>
 

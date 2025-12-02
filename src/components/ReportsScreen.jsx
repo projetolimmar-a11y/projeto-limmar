@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import './ReportsScreen.css';
 
 function ReportsScreen({ tools = [], records = [], failures = [], apiBase, token }) {
   const [period, setPeriod] = useState("day");
@@ -107,10 +108,10 @@ function ReportsScreen({ tools = [], records = [], failures = [], apiBase, token
       <div className="card">
         <div className="card-title">Filtro</div>
         <div style={{ display: 'flex', gap: '0.75rem', alignItems: 'center', padding: '0.75rem' }}>
-          <label style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+          <label style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }} htmlFor="periodSelect">
             Período:
             <div className="select-wrapper">
-              <select className="form-control select-custom" value={period} onChange={(e) => setPeriod(e.target.value)}>
+              <select id="periodSelect" name="period" className="form-control select-custom" value={period} onChange={(e) => setPeriod(e.target.value)}>
                 <option value="day">Últimas 24h</option>
                 <option value="week">Última semana</option>
                 <option value="month">Último mês</option>
@@ -118,10 +119,10 @@ function ReportsScreen({ tools = [], records = [], failures = [], apiBase, token
               </select>
             </div>
           </label>
-          <label style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+          <label style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }} htmlFor="toolSelect">
             Ferramenta:
             <div className={`select-wrapper`}>
-              <select className="form-control select-custom" value={toolId} onChange={(e)=>setToolId(e.target.value)}>
+              <select id="toolSelect" name="tool_id" className="form-control select-custom" value={toolId} onChange={(e)=>setToolId(e.target.value)}>
                 <option value="">Todas as Ferramentas</option>
                 {tools.map(t => <option value={t.id} key={t.id}>{t.code} - {t.description}</option>)}
               </select>

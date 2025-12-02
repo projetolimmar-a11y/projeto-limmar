@@ -1,4 +1,5 @@
 import React, { useEffect, useState, useMemo, useCallback } from "react";
+import "./DashboardScreen.css";
 import { Line, Bar } from "react-chartjs-2";
 import {
   Chart as ChartJS,
@@ -118,6 +119,21 @@ function DashboardScreen({ apiBase, token }) {
       console.warn('SSE not available', err);
       // ignore, will fallback to polling
     }
+      // handle record updates
+      if (es) {
+        es.addEventListener('record_updated', (e) => {
+          try {
+            const data = JSON.parse(e.data);
+            setLiveRecords((prev) => {
+              const idx = prev.findIndex(r => String(r.id) === String(data.id));
+              if (idx === -1) return [data, ...prev];
+              const copy = [...prev];
+              copy[idx] = data;
+              return copy;
+            });
+          } catch (err) { console.warn('record_updated parse error', err); }
+        });
+      }
 
     // polling fallback
     const poll = setInterval(async () => {
@@ -141,6 +157,7 @@ function DashboardScreen({ apiBase, token }) {
       clearInterval(poll);
     };
   }, [perRecordThreshold, apiBase]);
+
   // sound helper
   function playBeep(level = 'info') {
     try {
@@ -301,14 +318,14 @@ function DashboardScreen({ apiBase, token }) {
               </tr>
             </thead>
             <tbody>
-              {toolStats.map((tool, idx) => (
-                <tr key={tool.id}>
-                  <td>{idx + 1}</td>
-                  <td>{tool.code} — {tool.description}</td>
-                  <td>{tool.currentAccumulated} peças</td>
-                  <td>{tool.lifeSpan || '-'}</td>
-                </tr>
-              ))}
+                  {dashboardData.piecesByTool.map((tp, idx) => (
+                    <tr key={tp.tool.id} className={tp.pieces >= accumThreshold ? 'tool-highlight' : ''}>
+                      <td>{idx + 1}</td>
+                      <td>{tp.tool.code} — {tp.tool.description}</td>
+                      <td>{tp.pieces} peças</td>
+                      <td>{tp.tool.max_life_cycles ? `${tp.tool.total_life_cycles || 0}/${tp.tool.max_life_cycles}` : '-'}</td>
+                    </tr>
+                  ))}
             </tbody>
           </table>
         </div>
@@ -428,10 +445,10 @@ function DashboardScreen({ apiBase, token }) {
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
           <div className="card-title">Alertas em Tempo Real</div>
           <div style={{ fontSize: '0.9rem', color: '#666' }}>
-            <label style={{ marginRight: '0.5rem' }}>Threshold acumulado:</label>
-            <input type="number" value={accumThreshold} onChange={(e)=>setAccumThreshold(Number(e.target.value)||0)} style={{ width: '80px', marginRight: '1rem' }} />
-            <label style={{ marginRight: '0.5rem' }}>Threshold/registro:</label>
-            <input type="number" value={perRecordThreshold} onChange={(e)=>setPerRecordThreshold(Number(e.target.value)||0)} style={{ width: '80px' }} />
+            <label htmlFor="accumThreshold" style={{ marginRight: '0.5rem' }}>Threshold acumulado:</label>
+            <input id="accumThreshold" name="accumThreshold" type="number" value={accumThreshold} onChange={(e)=>setAccumThreshold(Number(e.target.value)||0)} style={{ width: '80px', marginRight: '1rem' }} />
+            <label htmlFor="perRecordThreshold" style={{ marginRight: '0.5rem' }}>Threshold/registro:</label>
+            <input id="perRecordThreshold" name="perRecordThreshold" type="number" value={perRecordThreshold} onChange={(e)=>setPerRecordThreshold(Number(e.target.value)||0)} style={{ width: '80px' }} />
           </div>
         </div>
         <ul style={{ paddingLeft: '1rem' }}>

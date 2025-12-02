@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import './RegisterScreen.css';
 import Logo from "../assets/react.svg";
 import { validateCPF } from "../utils/helpers";
 
@@ -9,6 +10,8 @@ function RegisterScreen({ onRegister, onSwitchToLogin }) {
   const [confirmPassword, setConfirmPassword] = useState("");
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -80,41 +83,54 @@ function RegisterScreen({ onRegister, onSwitchToLogin }) {
   };
 
   return (
-    <div className="auth-container">
+    <div style={{
+      minHeight: '100vh',
+      display: 'flex',
+      flexDirection: 'column',
+      alignItems: 'center',
+      justifyContent: 'center',
+      background: 'linear-gradient(135deg, #0a0f1a 0%, #23282e 60%, #0a0f1a 100%), linear-gradient(90deg, transparent 0%, rgba(93,223,255,0.04) 50%, transparent 100%), linear-gradient(0deg, rgba(93,223,255,0.02) 0%, transparent 100%)',
+      backgroundAttachment: 'fixed',
+      position: 'relative',
+      borderRadius: 18,
+      boxShadow: '0 8px 32px rgba(0,0,0,0.45), 0 0 0 1.5px #5ddfff',
+      padding: 0,
+    }}>
       <div className="auth-logo-container">
-        <img src={Logo} alt="Logo" className="auth-logo" />
+        <img src={Logo} alt="Limmar Logo" className="auth-logo" />
       </div>
-
       <div className="auth-card">
         <h2 className="auth-title">Cadastro de Usuário</h2>
-
         <form onSubmit={handleSubmit} className="auth-form">
           <div className="form-group">
-            <label htmlFor="name">Nome Completo</label>
+            <label htmlFor="name" className="form-label">
+              <span className="label-icon">◆</span>
+              Nome Completo
+            </label>
             <input
               id="name"
               type="text"
               className="form-control"
               value={name}
               onChange={(e) => setName(e.target.value)}
-              placeholder="Digite seu nome completo"
+              placeholder="João Silva"
             />
           </div>
-
           <div className="form-group">
-            <label htmlFor="cpf">CPF</label>
+            <label htmlFor="cpf" className="form-label">
+              <span className="label-icon">◆</span>
+              CPF
+            </label>
             <input
               id="cpf"
               type="text"
               className="form-control"
               value={cpf}
               onChange={(e) => {
-                // Previne campo vazio
                 if (!e.target.value) {
                   setCpf('');
                   return;
                 }
-                // Formata o CPF (000.000.000-00)
                 const value = e.target.value.replace(/\D/g, '');
                 let formattedValue = value;
                 if (value.length > 3) formattedValue = value.replace(/^(\d{3})/, '$1.');
@@ -126,52 +142,73 @@ function RegisterScreen({ onRegister, onSwitchToLogin }) {
               maxLength="14"
             />
           </div>
-
           <div className="form-group">
-            <label htmlFor="password">Senha</label>
-            <input
-              id="password"
-              type="password"
-              className="form-control"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              placeholder="Digite sua senha"
-            />
+            <label htmlFor="password" className="form-label">
+              <span className="label-icon">◆</span>
+              Senha
+            </label>
+            <div className="password-input-wrapper">
+              <input
+                id="password"
+                type={showPassword ? "text" : "password"}
+                className="form-control"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                placeholder="••••••••"
+              />
+              <button
+                type="button"
+                className="password-toggle"
+                onClick={() => setShowPassword(!showPassword)}
+                tabIndex="-1"
+              >
+                {showPassword ? "👁️" : "👁️‍🗨️"}
+              </button>
+            </div>
+            <small className="form-hint">Mín. 8 caracteres, letras, números e símbolos</small>
           </div>
-
           <div className="form-group">
-            <label htmlFor="confirmPassword">Confirmar Senha</label>
-            <input
-              id="confirmPassword"
-              type="password"
-              className="form-control"
-              value={confirmPassword}
-              onChange={(e) => setConfirmPassword(e.target.value)}
-              placeholder="Confirme sua senha"
-            />
+            <label htmlFor="confirmPassword" className="form-label">
+              <span className="label-icon">◆</span>
+              Confirmar Senha
+            </label>
+            <div className="password-input-wrapper">
+              <input
+                id="confirmPassword"
+                type={showConfirmPassword ? "text" : "password"}
+                className="form-control"
+                value={confirmPassword}
+                onChange={(e) => setConfirmPassword(e.target.value)}
+                placeholder="••••••••"
+              />
+              <button
+                type="button"
+                className="password-toggle"
+                onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                tabIndex="-1"
+              >
+                {showConfirmPassword ? "👁️" : "👁️‍🗨️"}
+              </button>
+            </div>
           </div>
-
           {error && (
             <div className="error-message">
+              <span className="error-icon">⚠</span>
               {error}
             </div>
           )}
-
           {success && (
             <div className="success-message">
+              <span className="success-icon">✓</span>
               {success}
             </div>
           )}
-
           <button type="submit" className="btn-block">
-            Cadastrar
+            <span className="btn-text">⟶ Cadastrar</span>
           </button>
         </form>
-
         <div className="auth-footer">
-          <button type="button" onClick={onSwitchToLogin} className="btn-link">
-            Já tem uma conta? Faça login
-          </button>
+          <p className="footer-text">Já tem uma conta? <button type="button" onClick={onSwitchToLogin} className="btn-link">Faça login</button></p>
         </div>
       </div>
     </div>

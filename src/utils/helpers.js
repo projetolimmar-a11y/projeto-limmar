@@ -35,11 +35,7 @@ export const initializeMockData = () => {
     localStorage.setItem("users", JSON.stringify([{ id: 1, name: "Admin User", cpf: "12345678909", password: "admin123" }]));
   }
   if (!localStorage.getItem("tools")) {
-    localStorage.setItem("tools", JSON.stringify([
-      { id: 1, code: "FERR-001", description: "Fresa CNC Precision" },
-      { id: 2, code: "FERR-002", description: "Broca Diamantada" },
-      { id: 3, code: "FERR-003", description: "Serra Circular" },
-    ]));
+    localStorage.setItem("tools", JSON.stringify([]));
   }
   if (!localStorage.getItem("production_records")) {
     localStorage.setItem("production_records", JSON.stringify([]));

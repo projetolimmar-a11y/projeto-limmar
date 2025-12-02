@@ -64,6 +64,8 @@
 .form-group .form-control {
   height: 56px;
   padding: 0 1rem;
+  /* ensure left padding available when inputs have icons or placeholder overlays */
+  padding-left: 12px !important;
   font-size: 1rem;
   letter-spacing: 0.2px;
   background: rgba(0, 0, 0, 0.16);
@@ -71,6 +73,12 @@
   border-radius: 8px;
   color: var(--text-main);
   transition: all 0.2s ease;
+}
+
+/* Force placeholder color inside tool forms */
+.form-group .form-control::placeholder {
+  color: var(--text-muted) !important;
+  opacity: 1 !important;
 }
 
 .form-group .form-control:focus {
@@ -100,6 +108,138 @@
   box-shadow: var(--shadow);
   margin-top: 2rem;
 }
+
+/* Additional tools-specific decorations moved from App.css */
+.tools-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 180px;
+  background: var(--metal-shine);
+  opacity: 0.15;
+  pointer-events: none;
+  border-radius: 12px 12px 0 0;
+}
+
+.tools-card .table-container {
+  position: relative;
+  z-index: 1;
+}
+
+.tools-card .table {
+  background: var(--bg-card-alt);
+  box-shadow: 0 4px 16px rgba(0,0,0,0.16);
+  border: 1px solid rgba(255,255,255,0.03);
+}
+
+.tools-card .table th {
+  background: transparent;
+  color: var(--accent-color);
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  font-size: 0.85rem;
+  padding: 1rem 1.25rem;
+  border-bottom: 2px solid rgba(255,255,255,0.04);
+}
+
+.tools-card .table td {
+  padding: 1rem 1.25rem;
+  color: var(--text-main);
+  border-bottom: 1px solid rgba(255,255,255,0.06);
+}
+
+/* Darker select and option styling to avoid bright white */
+/* selects: ensure text is visible and vertically centered */
+.tools-card select,
+.tools-card .select-custom,
+.tools-card .form-control select {
+  background: var(--input-bg);
+  color: var(--text-main) !important;
+  border: 1px solid rgba(255,255,255,0.04);
+  padding: 10px 60px 10px 12px;
+  /* reserve extra space on the right for the custom arrow */
+  box-sizing: border-box;
+  border-radius: 8px;
+  appearance: none;
+  -webkit-appearance: none;
+  min-height: 44px;
+  min-width: 140px;
+  height: auto;
+  line-height: 1.4;
+  font-size: 0.95rem;
+  display: inline-block;
+  vertical-align: middle;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* Options styling (works in most browsers) */
+.tools-card select option,
+.tools-card .select-custom option {
+  background: linear-gradient(180deg, rgba(12,14,16,0.55), rgba(24,28,30,0.6));
+  color: var(--text-main);
+  font-size: 0.95rem;
+}
+
+.tools-card select:focus,
+.tools-card .select-custom:focus,
+.tools-card .form-control select:focus {
+  outline: none;
+  border-color: var(--accent-color);
+  box-shadow: 0 6px 20px rgba(10,20,25,0.5), 0 0 0 6px rgba(93,223,255,0.05);
+}
+
+/* Ensure dropdown arrow is subtle */
+.tools-card .form-control.select-custom {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24'%3E%3Cpath fill='%235ddfff' d='M7.41 8.59L12 13.17l4.59-4.58L18 10l-6 6-6-6z'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  /* position arrow inside the padded area and scale it down */
+  background-position: right 12px center;
+  background-size: 16px 16px;
+}
+
+/* Small / inline controls (improve look shown in attachment) */
+.small-input,
+.form-control.small,
+.select-custom.small {
+  display: inline-block;
+  min-width: 72px;
+  padding: 8px 40px 8px 12px;
+  border-radius: 10px;
+  background: var(--input-bg);
+  border: 1px solid rgba(255,255,255,0.04);
+  box-shadow: inset 0 1px 0 rgba(255,255,255,0.02), 0 6px 18px rgba(10,20,25,0.25);
+  color: var(--text-main);
+  font-weight: 600;
+  text-align: center;
+  box-sizing: border-box;
+}
+
+.small-input:focus,
+.form-control.small:focus,
+.select-custom.small:focus {
+  outline: none;
+  border-color: var(--accent-color);
+  box-shadow: 0 0 0 6px rgba(93,223,255,0.06), 0 8px 20px rgba(10,20,25,0.45);
+  transform: translateY(-1px);
+}
+
+/* tiny adornment (small flag / indicator) */
+.small-indicator {
+  display: inline-block;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--accent-color), var(--accent-color-dark));
+  box-shadow: 0 0 8px rgba(93,223,255,0.35);
+  margin-left: 8px;
+  vertical-align: middle;
+}
+
 
 .sidebar-header {
   padding: 1.5rem;
@@ -280,6 +420,19 @@
   border-color: rgba(239, 68, 68, 0.15);
 }
 
+/* Tornar o botão de excluir na lista transparente (apenas o ícone colorido) */
+.tools-list .tool-actions .btn-icon.btn-danger {
+  background: transparent !important;
+  border-color: transparent !important;
+}
+.tools-list .tool-actions .btn-icon.btn-danger svg {
+  fill: var(--danger-color) !important;
+}
+.tools-list .tool-actions .btn-icon.btn-danger:hover {
+  background: rgba(244, 63, 94, 0.08) !important;
+  border-color: rgba(244, 63, 94, 0.12) !important;
+}
+
 /* Error Message */
 .tools-error {
   color: var(--danger-color);
@@ -314,4 +467,95 @@
   .tools-form .form-control {
     height: 48px;
   }
+}
+
+  /* Ferramentas-specific visual tweaks moved from index.css */
+  .ferramentas-card {
+    margin-top: 2rem;
+    background: rgba(10, 12, 14, 0.36) !important;
+    border: 1px solid rgba(255,255,255,0.04) !important;
+    backdrop-filter: blur(6px);
+    box-shadow: 0 8px 24px rgba(0,0,0,0.35);
+  }
+
+  .ferramentas-card .table,
+  .ferramentas-card .table thead,
+  .ferramentas-card .table tbody,
+  .ferramentas-card .table tr,
+  .ferramentas-card .table th,
+  .ferramentas-card .table td {
+    background: transparent !important;
+    color: var(--text-secondary) !important;
+  }
+
+  .ferramentas-card .table tbody { display: table-row-group !important; max-height: none !important; overflow: visible !important; }
+
+  .ferramentas-card .table-container,
+  .ferramentas-card .list-scroll,
+  .ferramentas-card ul,
+  .ferramentas-card .card { background: transparent !important; }
+
+  .tools-card { overflow: visible; }
+  .tools-card .table { max-height: none; overflow: visible; }
+
+/* Autocomplete and tool input helpers (moved from App.css) */
+.tool-input-container {
+  position: relative;
+  width: 100%;
+}
+
+.tool-input-wrapper {
+  position: relative;
+}
+
+.autocomplete-list {
+  position: absolute;
+  top: calc(100% + 0.5rem);
+  left: 0;
+  right: 0;
+  background: rgba(13, 17, 23, 0.98);
+  border: 1px solid rgba(93, 223, 255, 0.2);
+  border-radius: 12px;
+  margin-top: 0.5rem;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4),
+              0 4px 16px rgba(93, 223, 255, 0.1);
+  z-index: 1000;
+  max-height: 300px;
+  overflow-y: auto;
+  backdrop-filter: blur(10px);
+  animation: slideIn 0.2s ease;
+}
+
+@keyframes slideIn {
+  from { opacity: 0; transform: translateY(-10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.autocomplete-item {
+  padding: 0.85rem 1.25rem;
+  cursor: pointer;
+  border-bottom: 1px solid rgba(93, 223, 255, 0.1);
+  transition: all 0.2s ease;
+  min-height: 44px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.autocomplete-item:hover,
+.autocomplete-item.active {
+  background: rgba(93, 223, 255, 0.1);
+  transform: translateX(4px);
+}
+
+.tools-dropdown-item {
+  padding: 0.75rem 1rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.tools-dropdown-item:hover,
+.tools-dropdown-item.active {
+  background: rgba(93, 223, 255, 0.1);
 }

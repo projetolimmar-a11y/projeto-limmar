@@ -56,15 +56,61 @@ async function initializeDatabase(force = false) {
     const fs = require('fs');
     const path = require('path');
     const initSql = fs.readFileSync(path.join(__dirname, 'init.sql'), 'utf8');
-    
-    // Dividir o arquivo em comandos individuais e executá-los
-    const commands = initSql.split(';').filter(cmd => cmd.trim());
+
+    // Parser simples que respeita directives DELIMITER para não quebrar
+    // procedures/triggers que usam ';' internamente.
+    function splitSqlByDelimiter(sql) {
+      const lines = sql.split(/\r?\n/);
+      let delimiter = ';';
+      let buffer = '';
+      const statements = [];
+
+      for (let rawLine of lines) {
+        const line = rawLine.replace(/\t/g, '');
+        const m = line.trim().match(/^DELIMITER\s+(.*)$/i);
+        if (m) {
+          // When delimiter changes, flush any buffered statement (if any)
+          if (buffer.trim()) {
+            statements.push(buffer.trim());
+            buffer = '';
+          }
+          delimiter = m[1];
+          continue;
+        }
+
+        buffer += rawLine + '\n';
+
+        // Check if buffer ends with the current delimiter
+        if (delimiter === ';') {
+          if (buffer.trim().endsWith(';')) {
+            // remove last semicolon
+            const stmt = buffer.trim();
+            statements.push(stmt.replace(/;\s*$/, ''));
+            buffer = '';
+          }
+        } else if (buffer.indexOf(delimiter) !== -1) {
+          // If custom delimiter is present, split by it. There may be multiple in buffer.
+          let parts = buffer.split(delimiter);
+          // All full parts except possibly the last are complete statements
+          for (let i = 0; i < parts.length - 1; i++) {
+            const s = parts[i].trim();
+            if (s) statements.push(s);
+          }
+          buffer = parts[parts.length - 1];
+        }
+      }
+
+      if (buffer.trim()) statements.push(buffer.trim());
+      return statements.map(s => s.trim()).filter(s => s.length > 0);
+    }
+
+    const commands = splitSqlByDelimiter(initSql);
     for (let cmd of commands) {
-      if (cmd.trim()) {
+      if (cmd) {
         try {
           await conn.query(cmd);
         } catch (err) {
-          console.error('Erro ao executar comando:', cmd.trim());
+          console.error('Erro ao executar comando:', cmd.length > 200 ? cmd.slice(0, 200) + '...' : cmd);
           console.error('Erro:', err.message);
         }
       }
@@ -390,9 +436,13 @@ function requireAuth(req, res, next) {
 // Records
 app.get('/api/records', async (req, res) => {
   const { id, machine } = req.query;
+  const userId = req.user?.id; // Obtém o ID do usuário do token JWT se autenticado
+  
   try {
     if (USE_IN_MEMORY) {
       let rows = mem.production_records.slice().sort((a,b)=> new Date(b.created_at) - new Date(a.created_at));
+      // Filtrar por usuário se autenticado
+      if (userId) rows = rows.filter(r => r.operator_id === userId);
       if (id) rows = rows.filter(r=>String(r.id)===String(id));
       if (machine) rows = rows.filter(r=> (r.machine||'').includes(machine));
       return res.json(rows);
@@ -401,6 +451,13 @@ app.get('/api/records', async (req, res) => {
     let sql = 'SELECT * FROM production_records';
     const params = [];
     const clauses = [];
+    
+    // Filtrar por usuário se autenticado
+    if (userId) {
+      clauses.push('operator_id = ?');
+      params.push(userId);
+    }
+    
     if (id) {
       clauses.push('id = ?');
       params.push(id);
@@ -422,21 +479,27 @@ app.get('/api/records', async (req, res) => {
 
 app.post('/api/records', requireAuth, async (req, res) => {
   const { tool_id, machine, pieces, entry_datetime, exit_datetime } = req.body;
+  const userId = req.user?.id; // Obtém ID do usuário do token
+  
   if (!tool_id || !machine || pieces == null) return res.status(400).json({ error: 'tool_id, machine and pieces required' });
   try {
     if (USE_IN_MEMORY) {
-      const created = { id: nextId(mem.production_records), tool_id, machine, pieces, entry_datetime, exit_datetime, created_at: new Date().toISOString() };
+      const created = { id: nextId(mem.production_records), tool_id, machine, pieces, entry_datetime, exit_datetime, operator_id: userId, created_at: new Date().toISOString() };
       mem.production_records.push(created);
       sendSSEEvent('record_created', created);
       return res.json(created);
     }
     const conn = await mysql.createConnection(DB_CONFIG);
     const [result] = await conn.query(
-      'INSERT INTO production_records (tool_id, machine, pieces, entry_datetime, exit_datetime) VALUES (?, ?, ?, ?, ?)',
-      [tool_id, machine, pieces, entry_datetime || null, exit_datetime || null]
+      'INSERT INTO production_records (tool_id, operator_id, machine, pieces, entry_datetime, exit_datetime) VALUES (?, ?, ?, ?, ?, ?)',
+      [tool_id, userId, machine, pieces, entry_datetime || null, exit_datetime || null]
     );
+    
+    // Buscar registro criado com todos os dados
+    const [rows] = await conn.query('SELECT * FROM production_records WHERE id = ?', [result.insertId]);
     await conn.end();
-    const created = { id: result.insertId, tool_id, machine, pieces, entry_datetime, exit_datetime };
+    
+    const created = rows[0];
     sendSSEEvent('record_created', created);
     res.json(created);
   } catch (err) {
@@ -472,22 +535,36 @@ app.delete('/api/records/:id', requireAuth, async (req, res) => {
 
 // Failures
 app.get('/api/failures', async (req, res) => {
+  const userId = req.user?.id; // Obtém o ID do usuário do token JWT se autenticado
+  
   try {
     if (USE_IN_MEMORY) {
-      const rows = mem.tool_failures.slice().sort((a,b)=> new Date(b.created_at)-new Date(a.created_at));
+      let rows = mem.tool_failures.slice().sort((a,b)=> new Date(b.created_at)-new Date(a.created_at));
+      // Filtrar por usuário se autenticado
+      if (userId) rows = rows.filter(r => r.operator_id === userId);
       return res.json(rows);
     }
     const conn = await mysql.createConnection(DB_CONFIG);
     
     // Buscar falhas com informações da ferramenta e do operador
-    const [rows] = await conn.query(`
+    let sql = `
       SELECT f.*, t.code as tool_code, t.description as tool_description, 
              u.name as operator_name
       FROM tool_failures f
       LEFT JOIN tools t ON f.tool_id = t.id
-      LEFT JOIN users u ON f.operator_id = u.id
-      ORDER BY f.created_at DESC
-    `);
+      LEFT JOIN users u ON f.operator_id = u.id`;
+    
+    const params = [];
+    
+    // Filtrar por usuário se autenticado
+    if (userId) {
+      sql += ' WHERE f.operator_id = ?';
+      params.push(userId);
+    }
+    
+    sql += ' ORDER BY f.created_at DESC';
+    
+    const [rows] = await conn.query(sql, params);
     
     await conn.end();
     res.json(rows);
@@ -537,6 +614,22 @@ app.post('/api/failures', requireAuth, async (req, res) => {
       };
       mem.tool_failures.push(created);
       sendSSEEvent('failure_created', created);
+      // Update in-memory production_records status to 'falhou' for affected records
+      const updated = [];
+      mem.production_records = mem.production_records.map(r => {
+        try {
+          const entry = r.entry_datetime ? new Date(r.entry_datetime) : new Date(r.created_at);
+          const failDate = new Date(created.failure_datetime);
+          if (r.tool_id === created.tool_id && entry <= failDate) {
+            const nr = { ...r, status: 'falhou' };
+            updated.push(nr);
+            return nr;
+          }
+        } catch { /* ignore date errors */ }
+        return r;
+      });
+      // Emit record_updated events for each updated record
+      updated.forEach(rec => sendSSEEvent('record_updated', rec));
       return res.json(created);
     }
 
@@ -572,9 +665,27 @@ app.post('/api/failures', requireAuth, async (req, res) => {
       WHERE f.id = ?
     `, [result.insertId]);
 
-    await conn.end();
     const created = rows[0];
     sendSSEEvent('failure_created', created);
+
+    // Atualizar registros de produção relacionados: marcar como 'falhou' quando a entrada for anterior/igual à falha
+    try {
+      const [uresult] = await conn.query(
+        `UPDATE production_records SET status = 'falhou' WHERE tool_id = ? AND ( (entry_datetime IS NOT NULL AND entry_datetime <= ?) OR (entry_datetime IS NULL AND created_at <= ?) ) AND status != 'falhou'`,
+        [created.tool_id, created.failure_datetime, created.failure_datetime]
+      );
+
+      if (uresult && uresult.affectedRows > 0) {
+        // Buscar registros atualizados para enviar via SSE
+        const [updatedRows] = await conn.query(`SELECT * FROM production_records WHERE tool_id = ? AND ( (entry_datetime IS NOT NULL AND entry_datetime <= ?) OR (entry_datetime IS NULL AND created_at <= ?) )`, [created.tool_id, created.failure_datetime, created.failure_datetime]);
+        updatedRows.forEach(r => sendSSEEvent('record_updated', r));
+      }
+    } catch (err) {
+      console.error('Erro ao atualizar registros após falha:', err && err.message);
+    } finally {
+      try { await conn.end(); } catch { /* ignore */ }
+    }
+
     res.json(created);
   } catch (err) {
     console.error(err);

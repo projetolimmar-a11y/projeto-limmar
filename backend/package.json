@@ -8,11 +8,11 @@
     "dev:win": "set DEV_NO_DB=1&& node server.js"
   },
   "dependencies": {
-    "express": "^4.18.2",
-    "mysql2": "^3.3.2",
-    "cors": "^2.8.5",
+    "bcrypt": "^5.1.0",
     "body-parser": "^1.20.2",
-    "bcrypt": "^5.1.0"
-    ,"jsonwebtoken": "^9.0.0"
+    "cors": "^2.8.5",
+    "express": "^4.21.2",
+    "jsonwebtoken": "^9.0.0",
+    "mysql2": "^3.3.2"
   }
 }

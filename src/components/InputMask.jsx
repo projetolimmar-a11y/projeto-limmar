@@ -1,4 +1,5 @@
 import React from 'react';
+import './InputMask.css';
 import ReactInputMask from 'react-input-mask';
 
 export function MaskedInput({ mask, value, onChange, placeholder, className, id, label, type = "text", required = false, ...props }) {

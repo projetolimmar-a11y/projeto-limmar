@@ -164,8 +164,10 @@ function ToolsScreen({ tools = [], onAddTool, onEditTool, onDeleteTool, onBack }
         <div className="card compact-card tools-card">
           <form onSubmit={editingTool ? handleEdit : handleAdd}>
             <div className="form-group">
-              <label>Código</label>
+              <label htmlFor="toolCode">Código</label>
               <input 
+                id="toolCode"
+                name="code"
                 className="form-control" 
                 value={formData.code} 
                 onChange={(e) => setFormData({...formData, code: e.target.value})} 
@@ -173,8 +175,10 @@ function ToolsScreen({ tools = [], onAddTool, onEditTool, onDeleteTool, onBack }
               />
             </div>
             <div className="form-group">
-              <label>Descrição</label>
+              <label htmlFor="toolDescription">Descrição</label>
               <input 
+                id="toolDescription"
+                name="description"
                 className="form-control" 
                 value={formData.description} 
                 onChange={(e) => setFormData({...formData, description: e.target.value})} 
@@ -182,8 +186,10 @@ function ToolsScreen({ tools = [], onAddTool, onEditTool, onDeleteTool, onBack }
               />
             </div>
             <div className="form-group">
-              <label>Marca</label>
+              <label htmlFor="toolBrand">Marca</label>
               <input 
+                id="toolBrand"
+                name="brand"
                 className="form-control" 
                 value={formData.brand} 
                 onChange={(e) => setFormData({...formData, brand: e.target.value})} 
@@ -191,13 +197,15 @@ function ToolsScreen({ tools = [], onAddTool, onEditTool, onDeleteTool, onBack }
               />
             </div>
             <div className="form-group">
-              <label>Tipo</label>
+              <label htmlFor="toolType">Tipo</label>
               <select 
-                className="form-control" 
+                id="toolType"
+                name="type"
+                className="form-control select-custom" 
                 value={formData.type} 
                 onChange={(e) => setFormData({...formData, type: e.target.value})}
               >
-                <option value="" disabled selected>Selecionar</option>
+                <option value="" disabled>Selecionar</option>
                 <option value="Fresa">Fresa</option>
                 <option value="Broca">Broca</option>
                 <option value="Insert">Insert</option>
@@ -207,8 +215,10 @@ function ToolsScreen({ tools = [], onAddTool, onEditTool, onDeleteTool, onBack }
               </select>
             </div>
             <div className="form-group">
-              <label>Diâmetro (mm)</label>
+              <label htmlFor="toolDiameter">Diâmetro (mm)</label>
               <input 
+                id="toolDiameter"
+                name="diameter"
                 className="form-control" 
                 type="number" 
                 step="0.01" 
@@ -218,8 +228,10 @@ function ToolsScreen({ tools = [], onAddTool, onEditTool, onDeleteTool, onBack }
               />
             </div>
             <div className="form-group">
-              <label>Comprimento (mm)</label>
+              <label htmlFor="toolLength">Comprimento (mm)</label>
               <input 
+                id="toolLength"
+                name="length"
                 className="form-control" 
                 type="number" 
                 step="0.01" 
@@ -229,13 +241,15 @@ function ToolsScreen({ tools = [], onAddTool, onEditTool, onDeleteTool, onBack }
               />
             </div>
             <div className="form-group">
-              <label>Material</label>
+              <label htmlFor="toolMaterial">Material</label>
               <select 
-                className="form-control" 
+                id="toolMaterial"
+                name="material"
+                className="form-control select-custom" 
                 value={formData.material} 
                 onChange={(e) => setFormData({...formData, material: e.target.value})}
               >
-                <option value="" disabled selected>Selecionar</option>
+                <option value="" disabled>Selecionar</option>
                 <option value="Aço Rápido">Aço Rápido (HSS)</option>
                 <option value="Metal Duro">Metal Duro</option>
                 <option value="Aço">Aço</option>
@@ -243,13 +257,15 @@ function ToolsScreen({ tools = [], onAddTool, onEditTool, onDeleteTool, onBack }
               </select>
             </div>
             <div className="form-group">
-              <label>Revestimento</label>
+              <label htmlFor="toolCoating">Revestimento</label>
               <select 
-                className="form-control" 
+                id="toolCoating"
+                name="coating"
+                className="form-control select-custom" 
                 value={formData.coating} 
                 onChange={(e) => setFormData({...formData, coating: e.target.value})}
               >
-                <option value="" disabled selected>Selecionar</option>
+                <option value="" disabled>Selecionar</option>
                 <option value="TiN">TiN</option>
                 <option value="TiCN">TiCN</option>
                 <option value="TiAlN">TiAlN</option>
@@ -261,8 +277,10 @@ function ToolsScreen({ tools = [], onAddTool, onEditTool, onDeleteTool, onBack }
               </select>
             </div>
             <div className="form-group">
-              <label>RPM Máximo</label>
+              <label htmlFor="toolMaxRpm">RPM Máximo</label>
               <input 
+                id="toolMaxRpm"
+                name="max_rpm"
                 className="form-control" 
                 type="number" 
                 value={formData.max_rpm} 
@@ -271,8 +289,10 @@ function ToolsScreen({ tools = [], onAddTool, onEditTool, onDeleteTool, onBack }
               />
             </div>
             <div className="form-group">
-              <label>Número de Arestas</label>
+              <label htmlFor="toolCuttingEdges">Número de Arestas</label>
               <input 
+                id="toolCuttingEdges"
+                name="cutting_edges"
                 className="form-control" 
                 type="number" 
                 value={formData.cutting_edges} 
@@ -281,8 +301,10 @@ function ToolsScreen({ tools = [], onAddTool, onEditTool, onDeleteTool, onBack }
               />
             </div>
             <div className="form-group">
-              <label>Observações</label>
+              <label htmlFor="toolNotes">Observações</label>
               <textarea 
+                id="toolNotes"
+                name="notes"
                 className="form-control" 
                 value={formData.notes} 
                 onChange={(e) => setFormData({...formData, notes: e.target.value})} 

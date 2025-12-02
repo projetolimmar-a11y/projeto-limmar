@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import './ObservationModal.css';
 
 function ObservationModal({ record, tools, observation, onObservationChange, onSave, onClose }) {
   const tool = tools.find((t) => t.id === record.tool_id);
@@ -29,28 +30,36 @@ function ObservationModal({ record, tools, observation, onObservationChange, onS
         </div>
 
         <div className="form-group">
-          <label>Ferramenta</label>
+          <label htmlFor="obs-tool">Ferramenta</label>
           <input
+            id="obs-tool"
+            name="obs-tool"
             type="text"
             className="form-control"
             value={tool ? `${tool.code} - ${tool.description}` : "N/A"}
             disabled
+            aria-disabled="true"
           />
         </div>
 
         <div className="form-group">
-          <label>Registro</label>
+          <label htmlFor="obs-record">Registro</label>
           <input
+            id="obs-record"
+            name="obs-record"
             type="text"
             className="form-control"
             value={`ID: ${record.id} - ${record.machine} - ${record.pieces} peças`}
             disabled
+            aria-disabled="true"
           />
         </div>
 
         <div className="form-group">
-          <label>Motivo da Falha/Observação</label>
+          <label htmlFor="obs-reason">Motivo da Falha/Observação</label>
           <textarea
+            id="obs-reason"
+            name="obs-reason"
             className="form-control"
             rows="4"
             value={observation}

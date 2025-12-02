@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import './LoginScreen.css';
 import Logo from "../assets/react.svg";
 import { validateCPF } from "../utils/helpers";
 
@@ -7,6 +8,7 @@ function LoginScreen({ onLogin, onSwitchToRegister }) {
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -54,29 +56,40 @@ function LoginScreen({ onLogin, onSwitchToRegister }) {
   };
 
   return (
-    <div className="auth-container">
+    <div style={{
+      minHeight: '100vh',
+      display: 'flex',
+      flexDirection: 'column',
+      alignItems: 'center',
+      justifyContent: 'center',
+      background: 'linear-gradient(135deg, #0a0f1a 0%, #23282e 60%, #0a0f1a 100%), linear-gradient(90deg, transparent 0%, rgba(93,223,255,0.04) 50%, transparent 100%), linear-gradient(0deg, rgba(93,223,255,0.02) 0%, transparent 100%)',
+      backgroundAttachment: 'fixed',
+      position: 'relative',
+      borderRadius: 18,
+      boxShadow: '0 8px 32px rgba(0,0,0,0.45), 0 0 0 1.5px #5ddfff',
+      padding: 0,
+    }}>
       <div className="auth-logo-container">
-        <img src={Logo} alt="Logo" className="auth-logo" />
+        <img src={Logo} alt="Limmar Logo" className="auth-logo" />
       </div>
-      
       <div className="auth-card">
         <h2 className="auth-title">Login no Sistema</h2>
-
         <form onSubmit={handleSubmit} className="auth-form">
           <div className="form-group">
-            <label htmlFor="cpf">CPF</label>
+            <label htmlFor="cpf" className="form-label">
+              <span className="label-icon">◆</span>
+              CPF
+            </label>
             <input
               id="cpf"
               type="text"
               className="form-control"
               value={cpf}
               onChange={(e) => {
-                // Previne campo vazio
                 if (!e.target.value) {
                   setCpf('');
                   return;
                 }
-                // Formata o CPF (000.000.000-00)
                 const value = e.target.value.replace(/\D/g, '');
                 let formattedValue = value;
                 if (value.length > 3) formattedValue = value.replace(/^(\d{3})/, '$1.');
@@ -89,34 +102,44 @@ function LoginScreen({ onLogin, onSwitchToRegister }) {
               inputMode="numeric"
             />
           </div>
-
           <div className="form-group">
-            <label htmlFor="password">Senha</label>
-            <input
-              id="password"
-              type="password"
-              className="form-control"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              placeholder="Digite sua senha"
-            />
+            <label htmlFor="password" className="form-label">
+              <span className="label-icon">◆</span>
+              Senha
+            </label>
+            <div className="password-input-wrapper">
+              <input
+                id="password"
+                type={showPassword ? "text" : "password"}
+                className="form-control"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                placeholder="••••••••"
+              />
+              <button
+                type="button"
+                className="password-toggle"
+                onClick={() => setShowPassword(!showPassword)}
+                tabIndex="-1"
+              >
+                {showPassword ? "👁️" : "👁️‍🗨️"}
+              </button>
+            </div>
           </div>
-
           {error && (
             <div className="error-message">
+              <span className="error-icon">⚠</span>
               {error}
             </div>
           )}
-
           <button type="submit" className="btn-block" disabled={isLoading}>
-            {isLoading ? 'Entrando...' : 'Entrar'}
+            <span className="btn-text">
+              {isLoading ? '⟳ Entrando...' : '⟶ Entrar'}
+            </span>
           </button>
         </form>
-
         <div className="auth-footer">
-          <button type="button" onClick={onSwitchToRegister} className="btn-link">
-            Não tem conta? Cadastre-se aqui
-          </button>
+          <p className="footer-text">Não tem conta? <button type="button" onClick={onSwitchToRegister} className="btn-link">Cadastre-se aqui</button></p>
         </div>
       </div>
     </div>

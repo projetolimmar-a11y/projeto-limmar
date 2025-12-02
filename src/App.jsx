@@ -51,14 +51,32 @@ function App() {
         fetch(`${API_BASE}/api/records`, { headers }),
         fetch(`${API_BASE}/api/failures`, { headers }),
       ]);
-      if (toolsRes.ok) setTools(await toolsRes.json());
-      else setTools(JSON.parse(localStorage.getItem("tools") || "[]"));
+      let serverTools = [];
+      let serverRecords = [];
+      let serverFailures = [];
 
-      if (recordsRes.ok) setRecords(await recordsRes.json());
-      else setRecords(JSON.parse(localStorage.getItem("production_records") || "[]"));
+      if (toolsRes.ok) serverTools = await toolsRes.json();
+      else serverTools = JSON.parse(localStorage.getItem("tools") || "[]");
 
-      if (failuresRes.ok) setFailures(await failuresRes.json());
-      else setFailures(JSON.parse(localStorage.getItem("tool_failures") || "[]"));
+      if (recordsRes.ok) serverRecords = await recordsRes.json();
+      else serverRecords = JSON.parse(localStorage.getItem("production_records") || "[]");
+
+      if (failuresRes.ok) serverFailures = await failuresRes.json();
+      else serverFailures = JSON.parse(localStorage.getItem("tool_failures") || "[]");
+
+      setTools(serverTools);
+      setRecords(serverRecords);
+      setFailures(serverFailures);
+
+      // After loading data from backend, try a conservative sync from localStorage
+      // This will only push local data to server when server returned empty arrays
+      // to avoid accidental duplicates.
+      try {
+        await syncLocalToServer(token ? { Authorization: `Bearer ${token}` } : {}, serverTools, serverRecords, serverFailures);
+      } catch (err) {
+        // ignore sync errors; UI already has data
+        console.warn('Sync local->server failed:', err);
+      }
     } catch {
       // fallback to localStorage if backend not available
       setTools(JSON.parse(localStorage.getItem("tools") || "[]"));
@@ -67,12 +85,50 @@ function App() {
     }
   }, [token, API_BASE]);
 
+  // Conservative sync: only push localStorage data to backend when server returned no items
+  // This avoids creating duplicates when both server and local have entries.
+  const syncLocalToServer = async (headers, serverTools, serverRecords, serverFailures) => {
+    // Only sync tools if server has no tools
+    if ((!serverTools || serverTools.length === 0) && localStorage.getItem('tools')) {
+      const local = JSON.parse(localStorage.getItem('tools') || '[]');
+      for (const t of local) {
+        try {
+          await fetch(`${API_BASE}/api/tools`, { method: 'POST', headers: { 'Content-Type': 'application/json', ...(headers || {}) }, body: JSON.stringify(t) });
+        } catch (err) { /* ignore per-item failures */ }
+      }
+    }
+
+    // Only sync production records if server has no records
+    if ((!serverRecords || serverRecords.length === 0) && localStorage.getItem('production_records')) {
+      const local = JSON.parse(localStorage.getItem('production_records') || '[]');
+      for (const r of local) {
+        try {
+          await fetch(`${API_BASE}/api/records`, { method: 'POST', headers: { 'Content-Type': 'application/json', ...(headers || {}) }, body: JSON.stringify(r) });
+        } catch (err) { /* ignore per-item failures */ }
+      }
+    }
+
+    // Only sync failures if server has no failures
+    if ((!serverFailures || serverFailures.length === 0) && localStorage.getItem('tool_failures')) {
+      const local = JSON.parse(localStorage.getItem('tool_failures') || '[]');
+      for (const f of local) {
+        try {
+          await fetch(`${API_BASE}/api/failures`, { method: 'POST', headers: { 'Content-Type': 'application/json', ...(headers || {}) }, body: JSON.stringify(f) });
+        } catch (err) { /* ignore per-item failures */ }
+      }
+    }
+  };
+
   useEffect(() => {
     initializeMockData();
-    loadData();
+    // Não redireciona automaticamente para dashboard
+    // Usuário precisa fazer login novamente
     const user = localStorage.getItem("currentUser");
-    if (user) {
+    const token = localStorage.getItem("token");
+    if (user && token) {
       setCurrentUser(JSON.parse(user));
+      setToken(token);
+      loadData();
       setCurrentScreen("dashboard");
     }
   }, [loadData]);
@@ -146,6 +202,13 @@ function App() {
     localStorage.removeItem("currentUser");
     setToken(null);
     localStorage.removeItem('token');
+    // Limpa dados armazenados para não aparecer para próximo usuário
+    localStorage.removeItem('tools');
+    localStorage.removeItem('production_records');
+    localStorage.removeItem('tool_failures');
+    setTools([]);
+    setRecords([]);
+    setFailures([]);
     setCurrentScreen("login");
   };
 
@@ -237,7 +300,7 @@ function App() {
     // post to backend
     const payload = { 
       ...record,
-      created_by: currentUser?.id,
+      operator_id: currentUser?.id,
       created_at: new Date().toISOString() 
     };
     const headers = { "Content-Type": "application/json" };
@@ -271,7 +334,7 @@ function App() {
         const newRecord = { 
           ...record, 
           id: records.length + 1, 
-          created_by: currentUser?.id, 
+          operator_id: currentUser?.id, 
           created_at: new Date().toISOString() 
         };
         const updated = [...records, newRecord];
@@ -427,7 +490,7 @@ function App() {
       .then((r) => r.json())
       .then((created) => setFailures((prev) => [created, ...prev]))
       .catch(() => {
-        const newFailure = { ...failure, id: failures.length + 1, created_by: currentUser?.id, created_at: new Date().toISOString() };
+        const newFailure = { ...failure, id: failures.length + 1, operator_id: currentUser?.id, created_at: new Date().toISOString() };
         const updated = [...failures, newFailure];
         localStorage.setItem("tool_failures", JSON.stringify(updated));
         setFailures(updated);
